@@ -1,0 +1,21 @@
+# Ignore IntelliJ files
+.idea/
+*.iml
+
+# Ignore build directories
+/target/
+/dist/
+/build/
+
+# Ignore node_modules
+/node_modules/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore environment files
+*.env
