@@ -5,6 +5,7 @@ import org.lsi.entities.Operation;
 import org.lsi.metier.CompteMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class CompteRestService {
     }
 
     @GetMapping("/{codeCompte}/operations")
-    public List<Operation> listOperation(@PathVariable String codeCompte) {
-        return compteMetier.listOperation(codeCompte);
+    public Page<Operation> listOperation(@PathVariable String codeCompte, Pageable pageable) {
+        return compteMetier.listOperationsByCompte(codeCompte, pageable);
     }
 }

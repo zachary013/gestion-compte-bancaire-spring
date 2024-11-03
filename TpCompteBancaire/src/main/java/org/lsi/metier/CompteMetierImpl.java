@@ -33,6 +33,19 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Override
     public Compte saveCompte(Compte cp) {
+        Client client = clientRepository.findById(cp.getClient().getCodeClient())
+                .orElseThrow(() -> new RuntimeException("Client non trouvé"));
+        // Vérifier si l'employé existe
+        Employe employe = employeRepository.findById(cp.getEmploye().getCodeEmploye())
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+        // Définir la date de création si elle n'est pas spécifiée
+        if (cp.getDateCreation() == null) {
+            cp.setDateCreation(new Date());
+        }
+        // Associer le client et l'employé
+        cp.setClient(client);
+        cp.setEmploye(employe);
+
         return compteRepository.save(cp);
     }
 
