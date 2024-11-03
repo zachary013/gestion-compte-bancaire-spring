@@ -32,16 +32,13 @@ public class EmployeMtierImpl implements EmployeMetier {
 
     @Override
     @Transactional
-    public Employe affecterEmployeGroupe(Long codeEmploye, Long codeGroupe) {
+    public void affecterEmployeGroupe(Long codeEmploye, Long codeGroupe) {
         Employe employe = employeRepository.findById(codeEmploye)
                 .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé"));
 
-        if (employe.getGroupes() == null) {
-            employe.setGroupes(new ArrayList<>());
-        }
         employe.getGroupes().add(groupe);
-        return employeRepository.save(employe);
+        employeRepository.save(employe);
     }
 }

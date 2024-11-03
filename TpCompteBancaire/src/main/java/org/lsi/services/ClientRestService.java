@@ -20,12 +20,12 @@ public class ClientRestService {
     }
 
     @GetMapping
-    public List<Client> listClients() {
+    public List<Client> listClient() {
         return clientMetier.listClient();
     }
 
     @GetMapping("/{codeClient}/comptes")
-    public List<Compte> getClientComptes(@PathVariable Long codeClient) {
+    public List<Compte> getComptesClient(@PathVariable Long codeClient) {
         return clientMetier.getComptesClient(codeClient);
     }
 }

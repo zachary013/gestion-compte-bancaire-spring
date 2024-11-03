@@ -1,15 +1,19 @@
 package org.lsi.metier;
 
+import org.lsi.dao.ClientRepository;
 import org.lsi.dao.CompteRepository;
+import org.lsi.dao.EmployeRepository;
 import org.lsi.dao.OperationRepository;
 import org.lsi.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -17,6 +21,13 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Autowired
     private CompteRepository compteRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private EmployeRepository employeRepository;
+
     @Autowired
     private OperationRepository operationRepository;
 
@@ -27,42 +38,47 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Override
     public Compte getCompte(String code) {
-        return compteRepository.findById(code).orElseThrow(() -> new RuntimeException("Compte non trouvé"));
+        return compteRepository.findById(code).orElse(null);
     }
 
     @Override
-    public Compte verser(String code, double montant) {
-        Compte cp = getCompte(code);
-        Versement v = new Versement(new Date(), montant);
-        v.setCompte(cp);
-        operationRepository.save(v);
+    public Compte verser(String code, double montant, Long codeEmp) {
+        Compte cp = compteRepository.findById(code).orElseThrow(() -> new RuntimeException("Compte not found"));
+        Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
+        Operation op = new Versement(new Date(), montant);
+        op.setCompte(cp);
+        op.setEmploye(e);
+        operationRepository.save(op);
         cp.setSolde(cp.getSolde() + montant);
         return compteRepository.save(cp);
     }
 
     @Override
-    public Compte retirer(String code, double montant) {
-        Compte cp = getCompte(code);
-        double facilitesCaisse = 0;
-        if(cp instanceof CompteCourant)
-            facilitesCaisse = ((CompteCourant) cp).getDecouvert();
-        if(cp.getSolde() + facilitesCaisse < montant)
+    public Compte retirer(String code, double montant, Long codeEmp) {
+        Compte cp = compteRepository.findById(code).orElseThrow(() -> new RuntimeException("Compte not found"));
+        if (cp.getSolde() < montant)
             throw new RuntimeException("Solde insuffisant");
-        Retrait r = new Retrait(new Date(), montant);
-        r.setCompte(cp);
-        operationRepository.save(r);
+        Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
+        Operation op = new Retrait(new Date(), montant);
+        op.setCompte(cp);
+        op.setEmploye(e);
+        operationRepository.save(op);
         cp.setSolde(cp.getSolde() - montant);
         return compteRepository.save(cp);
     }
 
     @Override
-    public Compte virement(String cpte1, String cpte2, double montant) {
-        retirer(cpte1, montant);
-        return verser(cpte2, montant);
+    public Compte virement(String cpte1, String cpte2, double montant, Long codeEmp) {
+        retirer(cpte1, montant, codeEmp);
+        verser(cpte2, montant, codeEmp);
+        return compteRepository.findById(cpte1).orElse(null);
     }
 
     @Override
-    public Page<Operation> listOperation(String codeCompte, int page, int size) {
-        return operationRepository.listOperation(codeCompte, PageRequest.of(page, size));
+    public Page<Operation> listOperationsByCompte(String codeCompte, Pageable pageable) {
+        Compte compte = compteRepository.findById(codeCompte)
+                .orElseThrow(() -> new RuntimeException("Compte non trouvé"));
+        return operationRepository.findByCompte(compte, pageable);
     }
+
 }

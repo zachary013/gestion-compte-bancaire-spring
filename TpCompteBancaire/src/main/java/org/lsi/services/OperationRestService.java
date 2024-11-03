@@ -22,8 +22,4 @@ public class OperationRestService {
         return operationMetier.listOperations();
     }
 
-    @GetMapping("/compte/{codeCompte}")
-    public List<Operation> listOperationsByCompte(@PathVariable String codeCompte) {
-        return operationMetier.listOperationsByCompte(codeCompte);
-    }
 }

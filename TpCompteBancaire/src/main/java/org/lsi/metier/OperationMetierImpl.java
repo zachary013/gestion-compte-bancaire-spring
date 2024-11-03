@@ -20,13 +20,9 @@ public class OperationMetierImpl implements OperationMetier {
         return operationRepository.save(op);
     }
 
+    //retourner toutes les operations de la BD
     @Override
     public List<Operation> listOperations() {
         return operationRepository.findAll();
-    }
-
-    @Override
-    public List<Operation> listOperationsByCompte(String codeCompte) {
-        return operationRepository.findByCompteCodeCompte(codeCompte);
     }
 }

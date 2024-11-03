@@ -24,9 +24,9 @@ public class EmployeRestService {
     }
 
     @PutMapping("/{codeEmploye}/groupes/{codeGroupe}")
-    public Employe affecterEmployeGroupe(
+    public void affecterEmployeGroupe(
             @PathVariable Long codeEmploye,
             @PathVariable Long codeGroupe) {
-        return employeMetier.affecterEmployeGroupe(codeEmploye, codeGroupe);
+        employeMetier.affecterEmployeGroupe(codeEmploye, codeGroupe);
     }
 }
