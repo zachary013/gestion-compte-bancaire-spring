@@ -14,6 +14,7 @@ public abstract class Compte implements Serializable {
     private String codeCompte;
     private Date dateCreation;
     private double solde;
+    private String typeCompte;
 
     @ManyToOne
     @JoinColumn(name="CODE_CLI")
@@ -25,6 +26,7 @@ public abstract class Compte implements Serializable {
 
     @OneToMany(mappedBy="compte")
     private Collection<Operation> operations;
+
 
     public Compte() {
         super();
@@ -83,5 +85,13 @@ public abstract class Compte implements Serializable {
 
     public void setOperations(Collection<Operation> operations) {
         this.operations = operations;
+    }
+
+    public String getTypeCompte() {
+        return typeCompte;
+    }
+
+    public void setTypeCompte(String typeCompte) {
+        this.typeCompte = typeCompte;
     }
 }

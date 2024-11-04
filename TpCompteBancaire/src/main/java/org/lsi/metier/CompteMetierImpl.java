@@ -11,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Transactional
@@ -32,17 +30,14 @@ public class CompteMetierImpl implements CompteMetier {
     private OperationRepository operationRepository;
 
     @Override
-    public Compte saveCompte(Compte cp) {
-        Client client = clientRepository.findById(cp.getClient().getCodeClient())
+    public Compte saveCompte(Compte cp, Long codeClient, Long codeEmploye) {
+        Client client = clientRepository.findById(codeClient)
                 .orElseThrow(() -> new RuntimeException("Client non trouvé"));
-        // Vérifier si l'employé existe
-        Employe employe = employeRepository.findById(cp.getEmploye().getCodeEmploye())
+
+        Employe employe = employeRepository.findById(codeEmploye)
                 .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-        // Définir la date de création si elle n'est pas spécifiée
-        if (cp.getDateCreation() == null) {
-            cp.setDateCreation(new Date());
-        }
-        // Associer le client et l'employé
+
+        cp.setDateCreation(new Date());
         cp.setClient(client);
         cp.setEmploye(employe);
 
@@ -50,13 +45,13 @@ public class CompteMetierImpl implements CompteMetier {
     }
 
     @Override
-    public Compte getCompte(String code) {
-        return compteRepository.findById(code).orElse(null);
+    public Compte getCompte(String codeCompte) {
+        return compteRepository.findById(codeCompte).orElse(null);
     }
 
     @Override
-    public Compte verser(String code, double montant, Long codeEmp) {
-        Compte cp = compteRepository.findById(code).orElseThrow(() -> new RuntimeException("Compte not found"));
+    public Compte verser(String codeCompte, double montant, Long codeEmp) {
+        Compte cp = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
         Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
         Operation op = new Versement(new Date(), montant);
         op.setCompte(cp);
@@ -67,8 +62,8 @@ public class CompteMetierImpl implements CompteMetier {
     }
 
     @Override
-    public Compte retirer(String code, double montant, Long codeEmp) {
-        Compte cp = compteRepository.findById(code).orElseThrow(() -> new RuntimeException("Compte not found"));
+    public Compte retirer(String codeCompte, double montant, Long codeEmp) {
+        Compte cp = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
         if (cp.getSolde() < montant)
             throw new RuntimeException("Solde insuffisant");
         Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
