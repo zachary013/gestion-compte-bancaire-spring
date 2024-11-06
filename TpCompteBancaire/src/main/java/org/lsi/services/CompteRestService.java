@@ -8,6 +8,7 @@ import org.lsi.metier.CompteMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,16 +22,22 @@ public class CompteRestService {
     private CompteMetier compteMetier;
 
     @PostMapping
-    public Compte saveCompte(@RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<Compte> saveCompte(@RequestBody Map<String, Object> requestData) {
         String typeCompte = (String) requestData.get("typeCompte");
-        Integer codeClient = (Integer) requestData.get("codeClient");
-        Integer codeEmploye = (Integer) requestData.get("codeEmploye");
-        String codeCompte = (String) requestData.get("codeCompte");
+        Long codeClient = Long.valueOf((Integer) requestData.get("codeClient"));
+        Long codeEmploye = Long.valueOf((Integer) requestData.get("codeEmploye"));
 
-        if (typeCompte.equals("E")) {
-            return compteMetier.saveCompte(new CompteEpargne(), codeClient.longValue(), codeEmploye.longValue(), codeCompte);
+        Compte cp;
+        if ("CE".equals(typeCompte)) {
+            cp = new CompteEpargne();
+            ((CompteEpargne) cp).setTaux((Double) requestData.get("taux"));
+        } else {
+            cp = new CompteCourant();
+            ((CompteCourant) cp).setDecouvert((Double) requestData.get("decouvert"));
         }
-        return compteMetier.saveCompte(new CompteCourant(), codeClient.longValue(), codeEmploye.longValue(), codeCompte);
+
+        cp = compteMetier.saveCompte(cp, codeClient, codeEmploye);
+        return ResponseEntity.ok(cp);
     }
 
     @GetMapping("/{code}")

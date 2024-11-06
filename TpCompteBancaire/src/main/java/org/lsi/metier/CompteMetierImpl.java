@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -37,6 +38,7 @@ public class CompteMetierImpl implements CompteMetier {
         Employe employe = employeRepository.findById(codeEmploye)
                 .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
 
+        cp.setCodeCompte(UUID.randomUUID().toString());
         cp.setDateCreation(new Date());
         cp.setClient(client);
         cp.setEmploye(employe);
@@ -46,7 +48,8 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Override
     public Compte getCompte(String codeCompte) {
-        return compteRepository.findById(codeCompte).orElse(null);
+        return compteRepository.findById(codeCompte)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
     @Override
