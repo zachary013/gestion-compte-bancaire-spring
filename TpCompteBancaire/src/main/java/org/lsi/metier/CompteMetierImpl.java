@@ -54,35 +54,47 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Override
     public Compte verser(String codeCompte, double montant, Long codeEmp) {
-        Compte cp = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
-        Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
-        Operation op = new Versement(new Date(), montant);
-        op.setCompte(cp);
-        op.setEmploye(e);
-        operationRepository.save(op);
-        cp.setSolde(cp.getSolde() + montant);
-        return compteRepository.save(cp);
+        try {
+            Compte cp = compteRepository.findById(codeCompte)
+                    .orElseThrow(() -> new RuntimeException("Compte not found"));
+            Employe e = employeRepository.findById(codeEmp)
+                    .orElseThrow(() -> new RuntimeException("Employe not found"));
+            Operation op = new Versement(new Date(), montant);
+            op.setCompte(cp);
+            op.setEmploye(e);
+            operationRepository.save(op);
+
+            cp.setSolde(cp.getSolde() + montant);
+            return compteRepository.save(cp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Erreur lors du versement : " + ex.getMessage());
+        }
     }
 
     @Override
     public Compte retirer(String codeCompte, double montant, Long codeEmp) {
-        Compte cp = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
-        if (cp.getSolde() < montant)
-            throw new RuntimeException("Solde insuffisant");
-        Employe e = employeRepository.findById(codeEmp).orElseThrow(() -> new RuntimeException("Employe not found"));
+        Compte cp = compteRepository.findById(codeCompte)
+                .orElseThrow(() -> new RuntimeException("Compte not found"));
+        if (cp.getSolde() < montant) {
+            throw new RuntimeException("Solde insuffisant pour effectuer le retrait");
+        }
+        Employe e = employeRepository.findById(codeEmp)
+                .orElseThrow(() -> new RuntimeException("Employe not found"));
         Operation op = new Retrait(new Date(), montant);
         op.setCompte(cp);
         op.setEmploye(e);
         operationRepository.save(op);
+
         cp.setSolde(cp.getSolde() - montant);
         return compteRepository.save(cp);
     }
 
     @Override
+    @Transactional
     public Compte virement(String cpte1, String cpte2, double montant, Long codeEmp) {
         retirer(cpte1, montant, codeEmp);
         verser(cpte2, montant, codeEmp);
-        return compteRepository.findById(cpte1).orElse(null);
+        return compteRepository.findById(cpte1).orElse(null);  // retourne le compte source après virement
     }
 
     @Override

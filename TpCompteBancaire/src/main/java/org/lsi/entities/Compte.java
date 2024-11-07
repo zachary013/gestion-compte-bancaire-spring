@@ -18,7 +18,6 @@ public abstract class Compte implements Serializable {
     private String codeCompte;
     private Date dateCreation;
     private double solde;
-    private String typeCompte;
 
     @JsonBackReference(value = "client-compte")
     @ManyToOne
@@ -94,11 +93,11 @@ public abstract class Compte implements Serializable {
         this.operations = operations;
     }
 
-    public String getTypeCompte() {
-        return typeCompte;
-    }
-
-    public void setTypeCompte(String typeCompte) {
-        this.typeCompte = typeCompte;
-    }
+//    public String getTypeCompte() {
+//        return typeCompte;
+//    }
+//
+//    public void setTypeCompte(String typeCompte) {
+//        this.typeCompte = typeCompte;
+//    }
 }
