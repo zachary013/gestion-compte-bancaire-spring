@@ -1,16 +1,21 @@
 package org.lsi.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
+@Data
 public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeClient;
     private String nomClient;
 
+    @JsonManagedReference(value = "client-compte")
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Collection<Compte> comptes;
 

@@ -1,5 +1,6 @@
 package org.lsi.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,10 +15,12 @@ public abstract class Operation implements Serializable {
     private Date dateOperation;
     private double montant;
 
+    @JsonBackReference(value = "compte-operation")
     @ManyToOne
     @JoinColumn(name = "CODE_CPTE")
     private Compte compte;
 
+    @JsonBackReference(value = "employe-operation")
     @ManyToOne
     @JoinColumn(name = "CODE_EMP")
     private Employe employe;

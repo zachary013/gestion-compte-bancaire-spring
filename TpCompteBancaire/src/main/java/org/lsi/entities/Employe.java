@@ -1,60 +1,54 @@
 package org.lsi.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeEmploye;
+
+    @NotBlank(message = "Le nom de l'employé ne peut pas être vide")
     private String nomEmploye;
 
-    @ManyToOne
+    @JsonBackReference(value = "employe-sup")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CODE_EMP_SUP")
     private Employe employeSup;
 
-    @ManyToMany
-    @JoinTable(name = "EMP_GR")
+    @JsonManagedReference(value = "employe-sub")
+    @OneToMany(mappedBy = "employeSup", fetch = FetchType.LAZY)
+    private Collection<Employe> subEmployes;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "EMP_GR",
+            joinColumns = @JoinColumn(name = "CODE_EMP"),
+            inverseJoinColumns = @JoinColumn(name = "CODE_GR"))
     private Collection<Groupe> groupes;
 
-    public Employe() {}
+    @JsonManagedReference(value = "employe-compte")
+    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY)
+    private Collection<Compte> comptes;
+
+    @JsonManagedReference(value = "employe-operation")
+    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY)
+    private Collection<Operation> operations;
 
     public Employe(String nomEmploye) {
         this.nomEmploye = nomEmploye;
-    }
-
-    // Getters and setters
-    public Long getCodeEmploye() {
-        return codeEmploye;
-    }
-
-    public void setCodeEmploye(Long codeEmploye) {
-        this.codeEmploye = codeEmploye;
-    }
-
-    public String getNomEmploye() {
-        return nomEmploye;
-    }
-
-    public void setNomEmploye(String nomEmploye) {
-        this.nomEmploye = nomEmploye;
-    }
-
-    public Employe getEmployeSup() {
-        return employeSup;
-    }
-
-    public void setEmployeSup(Employe employeSup) {
-        this.employeSup = employeSup;
-    }
-
-    public Collection<Groupe> getGroupes() {
-        return groupes;
-    }
-
-    public void setGroupes(Collection<Groupe> groupes) {
-        this.groupes = groupes;
     }
 }

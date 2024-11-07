@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="TYPE_CPTE",discriminatorType=DiscriminatorType.STRING,length=2)
+@Data
 public abstract class Compte implements Serializable {
     @Id
     private String codeCompte;
@@ -16,14 +20,17 @@ public abstract class Compte implements Serializable {
     private double solde;
     private String typeCompte;
 
+    @JsonBackReference(value = "client-compte")
     @ManyToOne
     @JoinColumn(name="CODE_CLI")
     private Client client;
 
+    @JsonBackReference(value = "employe-compte")
     @ManyToOne
     @JoinColumn(name="CODE_EMP")
     private Employe employe;
 
+    @JsonManagedReference(value = "compte-operation")
     @OneToMany(mappedBy="compte")
     private Collection<Operation> operations;
 
