@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card-header {
+      background-color: #007bff; /* Blue background */
+      color: white; /* White text */
+    }
+    .table th, .table td {
+      vertical-align: middle; /* Center-align table content */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container ">
+  <!-- Card for Client List -->
+  <div class="card rounded-0 border-black ">
+    <div class="card-header bg-secondary-subtle text-black border-black rounded-0">
+      <h3 class="mb-0">Client List</h3>
+    </div>
+    <div class="card-body">
+      <!-- Clients Table -->
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">Code Client</th>
+          <th scope="col">Nom Client</th>
+        </tr>
+        </thead>
+        <tbody id="clientTableBody">
+        <!-- Example rows; replace with dynamic content -->
+        <tr>
+          <td>001</td>
+          <td>Client A</td>
+        </tr>
+        <tr>
+          <td>002</td>
+          <td>Client B</td>
+        </tr>
+        <tr>
+          <td>003</td>
+          <td>Client C</td>
+        </tr>
+        <!-- More rows will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Example JavaScript for dynamically adding rows (if needed)
+  // This is just a placeholder and should be replaced by actual data fetching logic
+  document.addEventListener("DOMContentLoaded", function() {
+    const clients = [
+      { code_client: "004", nom_client: "Client D" },
+      { code_client: "005", nom_client: "Client E" },
+    ];
+
+    const tableBody = document.getElementById("clientTableBody");
+
+    clients.forEach(client => {
+      const row = document.createElement("tr");
+
+      const codeCell = document.createElement("td");
+      codeCell.textContent = client.code_client;
+      row.appendChild(codeCell);
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = client.nom_client;
+      row.appendChild(nameCell);
+
+      tableBody.appendChild(row);
+    });
+  });
+</script>
+</body>
+</html>

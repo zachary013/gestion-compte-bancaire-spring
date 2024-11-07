@@ -30,10 +30,12 @@ public class CompteRestService {
         Compte cp;
         if ("CE".equals(typeCompte)) {
             cp = new CompteEpargne();
-            ((CompteEpargne) cp).setTaux((Double) requestData.get("taux"));
+            Double taux = ((Number) requestData.get("taux")).doubleValue();
+            ((CompteEpargne) cp).setTaux(taux);
         } else {
             cp = new CompteCourant();
-            ((CompteCourant) cp).setDecouvert((Double) requestData.get("decouvert"));
+            Double decouvert = ((Number) requestData.get("decouvert")).doubleValue();
+            ((CompteCourant) cp).setDecouvert(decouvert);
         }
 
         cp = compteMetier.saveCompte(cp, codeClient, codeEmploye);

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virement Between Clients</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container ">
+  <div class="card rounded-0 border-black">
+    <div class="card-header bg-secondary-subtle text-black rounded-0 border-black">
+      <h3>Client Virement</h3>
+      <p class="mb-0">Transfer funds between two clients</p>
+    </div>
+    <div class="card-body">
+      <form>
+
+        <!-- Source Client Selection -->
+        <div class="mb-3">
+          <label for="sourceClientSelect" class="form-label">Source Client</label>
+          <select class="form-select" id="sourceClientSelect" required>
+            <option selected disabled>Select the client to transfer from...</option>
+            <!-- Example options (populate dynamically in production) -->
+            <option value="1">Client A</option>
+            <option value="2">Client B</option>
+            <option value="3">Client C</option>
+          </select>
+        </div>
+
+        <!-- Destination Client Selection -->
+        <div class="mb-3">
+          <label for="destinationClientSelect" class="form-label">Destination Client</label>
+          <select class="form-select" id="destinationClientSelect" required>
+            <option selected disabled>Select the client to transfer to...</option>
+            <!-- Example options (populate dynamically in production) -->
+            <option value="1">Client D</option>
+            <option value="2">Client E</option>
+            <option value="3">Client F</option>
+          </select>
+        </div>
+
+        <!-- Amount Input -->
+        <div class="mb-3">
+          <label for="amountInput" class="form-label">Virement Amount</label>
+          <input type="number" class="form-control" id="amountInput" placeholder="Enter amount" required>
+        </div>
+
+        <!-- Date Input -->
+        <div class="mb-3">
+          <label for="dateInput" class="form-label">Date</label>
+          <input type="date" class="form-control" id="dateInput" required>
+        </div>
+
+        <!-- Remarks -->
+        <div class="mb-3">
+          <label for="remarksInput" class="form-label">Remarks (Optional)</label>
+          <textarea class="form-control" id="remarksInput" rows="3" placeholder="Any additional details"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit Virement</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
