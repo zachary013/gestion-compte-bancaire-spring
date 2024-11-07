@@ -28,17 +28,23 @@ public class CompteRestService {
         Long codeEmploye = Long.valueOf((Integer) requestData.get("codeEmploye"));
 
         Compte cp;
-        if ("CE".equals(typeCompte)) {
-            cp = new CompteEpargne();
-            ((CompteEpargne) cp).setTaux((Double) requestData.get("taux"));
-        } else {
-            cp = new CompteCourant();
-            ((CompteCourant) cp).setDecouvert((Double) requestData.get("decouvert"));
+        switch (typeCompte) {
+            case "CE":
+                cp = new CompteEpargne();
+                ((CompteEpargne) cp).setTaux((Double) requestData.getOrDefault("taux", 0.0));
+                break;
+            case "CC":
+                cp = new CompteCourant();
+                ((CompteCourant) cp).setDecouvert((Double) requestData.getOrDefault("decouvert", 0.0));
+                break;
+            default:
+                throw new IllegalArgumentException("Type de compte invalide");
         }
 
         cp = compteMetier.saveCompte(cp, codeClient, codeEmploye);
         return ResponseEntity.ok(cp);
     }
+
 
     @GetMapping("/{code}")
     public Compte getCompte(@PathVariable String code) {
