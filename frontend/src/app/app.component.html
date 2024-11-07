@@ -3,9 +3,13 @@
   .bb:hover {
     background-color: #c3c3c3; /* Change the background color on hover */
   }
+  *{
+    font-family: "Roboto Light", sans-serif;
+  }
+
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid bg-light">
   <div class="row ">
     <!-- Sidebar and Navbar - Only displayed if not login or register page -->
     <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block  sidebar collapse position-fixed h-100 bg-black  border-end border-black " *ngIf="!isAuthPage">

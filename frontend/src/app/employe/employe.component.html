@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Layout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Optional: Add some spacing between cards */
+    .card {
+      margin-bottom: 20px;
+    }
+    .btn1{
+      border-radius: 0;
+      background-color: black;
+      color: white;
+      border: 1px;
+    }
+  </style>
+</head>
+<body class="bg-transparent">
+
+<div class="container" style="height: 100vh">
+  <div class="row">
+    <!-- First Card in Row 1 -->
+    <div class="col-md-6">
+      <div class="card rounded-0 border-black">
+        <div class="card-body">
+          <h5 class="card-title ">Clients</h5>
+          <img class="float-end" src="https://icon-library.com/images/clients-icon-png/clients-icon-png-1.jpg" width="100"/>
+          <p class="card-text fs-1">x200</p>
+          <a href="#" routerLink="/clients" class="btn btn-outline-dark btn1 btn-active rounded-0" >View Clients</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Card in Row 1 -->
+    <div class="col-md-6">
+      <div class="card rounded-0 border-black ">
+        <div class="card-body">
+          <h5 class="card-title">Versement</h5>
+          <img class="float-end" src="https://cdn-icons-png.flaticon.com/512/10685/10685952.png" width="100"/>
+          <p class="card-text fs-1">x200</p>
+          <a href="#" routerLink="/versement" class="btn btn-outline-dark btn1 btn-active rounded-0" >View Versement</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Single Card in Row 2 -->
+    <div class="col-md-6">
+      <div class="card rounded-0 border-black">
+        <div class="card-body">
+          <h5 class="card-title">Virement</h5>
+          <img class="float-end" src="https://cdn-icons-png.flaticon.com/512/3069/3069455.png" width="100"/>
+          <p class="card-text fs-1">x200</p>
+          <a href="#" routerLink="/virement" class="btn btn-outline-dark btn1 btn-active rounded-0" >View Virement</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
