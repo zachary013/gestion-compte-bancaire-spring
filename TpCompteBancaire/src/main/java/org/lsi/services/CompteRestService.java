@@ -16,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/comptes")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CompteRestService {
 
     @Autowired

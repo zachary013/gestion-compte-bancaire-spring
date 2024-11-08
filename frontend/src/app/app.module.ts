@@ -11,6 +11,7 @@ import { VirementComponent } from './virement/virement.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ComptesComponent } from './comptes/comptes.component';
 import {HttpClientModule} from '@angular/common/http';
+import { OperationComponent } from './operation/operation.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {HttpClientModule} from '@angular/common/http';
     VersementComponent,
     VirementComponent,
     ClientsComponent,
-    ComptesComponent
+    ComptesComponent,
+    OperationComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,7 @@ import {ComptesComponent} from './comptes/comptes.component';
 import {ClientsComponent} from './clients/clients.component';
 import {VirementComponent} from './virement/virement.component';
 import {VersementComponent} from './versement/versement.component';
+import {OperationComponent} from './operation/operation.component';
 
 const routes: Routes = [
   {path:'login',component:LoginComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path:'virement', component:VirementComponent},
   {path:'clients', component:ClientsComponent},
   {path:'comptes', component:ComptesComponent},
+  {path:'operations', component:OperationComponent},
 ];
 
 @NgModule({

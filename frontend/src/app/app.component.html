@@ -6,31 +6,116 @@
   *{
     font-family: "Roboto Light", sans-serif;
   }
+  .no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="container-fluid bg-light">
   <div class="row ">
     <!-- Sidebar and Navbar - Only displayed if not login or register page -->
-    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block  sidebar collapse position-fixed h-100 bg-black  border-end border-black " *ngIf="!isAuthPage">
+    <nav id="sidebar"
+         [ngClass]="{'col-md-3 col-lg-2': !isAuthPage, 'd-none': isAuthPage}"
+         class="sidebar position-fixed h-100 bg-dark p-0"
+         *ngIf="!isAuthPage">
       <div class="position-sticky pt-3 ">
 
-        <img src="/logo.webp" class="d-flex justify-content-center align-content-center w-100" width="100"/>
+        <div class="py-1 px-3">
+          <img src="/logo.png" class="d-flex justify-content-center align-content-center w-100" width="100"/>
+        </div>
+
         <ul class="nav flex-column  ">
           <li class="nav-item ">
-            <a class="nav-link btn btn-outline-dark text-white text-lg-start rounded-0  " routerLink="/dashboard">Dashboard</a>
+            <a class="nav-link btn btn-secondary text-white text-lg-start rounded-0 " routerLink="/dashboard">
+              <div class="d-flex justify-content-between  ">
+
+                <div class="row d-flex align-items-center">
+                  <i class="fa-solid fa-gauge col-md-1"></i>
+                  <div class="col">Dashboard</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-dark text-white text-lg-start rounded-0 " routerLink="/clients">Clients</a>
+            <a class="nav-link btn btn-secondary text-white text-lg-start rounded-0 " routerLink="/clients">
+              <div class="d-flex justify-content-between w-full ">
+
+                <div class="row d-flex align-items-center">
+                  <i class="fa-solid fa-person col-md-1 "></i>
+                  <div class="col">Clients</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-dark text-white text-lg-start rounded-0" routerLink="/versement">Versement</a>
+            <a class="nav-link btn btn-secondary text-white text-lg-start rounded-0" routerLink="/versement">
+              <div class="d-flex justify-content-between ">
+
+                <div class="row d-flex align-items-center">
+                  <i class="fa-solid fa-money-bill col-md-1"></i>
+                  <div class="col">Versement</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-dark text-white text-lg-start rounded-0" routerLink="/virement">Virements</a>
+            <a class=" nav-link btn btn-secondary text-white text-lg-start rounded-0" routerLink="/virement">
+              <div class="d-flex justify-content-between ">
+                <div class="row d-flex align-items-center">
+                  <i class="fa-solid fa-money-bill-transfer col-md-1"></i>
+                  <div class="col">Virements</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-dark text-white text-lg-start rounded-0" routerLink="/comptes">Comptes</a>
+            <a class=" nav-link btn btn-secondary text-white text-lg-start rounded-0" routerLink="/comptes">
+              <div class="d-flex justify-content-between ">
+
+                <div class="row d-flex align-items-center">
+                  <i class="fa-solid fa-file-invoice col-md-1"></i>
+                  <div class="col">Comptes</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class=" nav-link btn btn-secondary text-white text-lg-start rounded-0" routerLink="/operation">
+              <div class="d-flex justify-content-between ">
+
+                <div class="row d-flex align-items-center">
+                  <i class="fa-regular fa-file col-md-1"></i>
+                  <div class="col">Operations</div>
+                </div>
+                <div class="text-secondary">
+                  <i class="fa-solid fa-angle-right"></i>
+                </div>
+              </div>
+
+            </a>
           </li>
           <!-- Add other links as needed -->
         </ul>
@@ -38,7 +123,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 p-0 ">
+    <main [ngClass]="{'col-md-9 ms-sm-auto col-lg-10': !isAuthPage, 'col-12': isAuthPage}" class="p-0">
       <!-- Navbar - Only displayed if not login or register page -->
       <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top border-bottom border-black" *ngIf="!isAuthPage">
         <div class="container-fluid">
@@ -63,7 +148,7 @@
       </nav>
 
       <!-- Dashboard Content -->
-      <div class="pt-4 px-4"  >
+      <div class="pt-4 px-4" [ngClass]="{ 'no-padding': isAuthPage } " >
         <!-- Content section: Renders different components based on route -->
         <router-outlet></router-outlet>
       </div>
