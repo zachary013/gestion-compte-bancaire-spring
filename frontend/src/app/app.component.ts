@@ -7,7 +7,12 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  isAuthPage = false;
+  isSidebarCollapsed: boolean = false;
+  isAuthPage: boolean = false;
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
 
   constructor(private router: Router) {}
 
