@@ -34,17 +34,9 @@
         </thead>
         <tbody id="clientTableBody">
         <!-- Example rows; replace with dynamic content -->
-        <tr>
-          <td>001</td>
-          <td>Client A</td>
-        </tr>
-        <tr>
-          <td>002</td>
-          <td>Client B</td>
-        </tr>
-        <tr>
-          <td>003</td>
-          <td>Client C</td>
+        <tr *ngFor="let client of clients">
+          <td>{{client.codeClient}}</td>
+          <td>{{client.nomClient}}</td>
         </tr>
         <!-- More rows will be populated here -->
         </tbody>

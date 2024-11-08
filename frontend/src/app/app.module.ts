@@ -10,6 +10,7 @@ import { VersementComponent } from './versement/versement.component';
 import { VirementComponent } from './virement/virement.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ComptesComponent } from './comptes/comptes.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ComptesComponent } from './comptes/comptes.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
