@@ -4,24 +4,19 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class ComptesService {
+export class OperationService {
 
   url = "http://localhost:8081" ;
   constructor(private httpClient:HttpClient) { }
 
   add(data:any){
     return this.httpClient.post(this.url+
-      "/comptes",data, {
+      "/operations",data, {
       headers: new HttpHeaders().set('Content-Type','application/json')
     })
   }
 
 
-  getComptes(){
-    return this.httpClient.get(this.url + "/comptes");
-  }
-
-  getCompte(codeCompte: string) {
-    return this.httpClient.get(`${this.url}/comptes/${codeCompte}`);
-  }
-}
+  getOperations(){
+    return this.httpClient.get(this.url + "/operations");
+  }}

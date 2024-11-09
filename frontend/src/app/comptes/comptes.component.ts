@@ -11,17 +11,26 @@ import {ComptesService} from '../comptes.service';
 export class ComptesComponent implements OnInit{
 
   comptes: any ;
-  constructor(private compteservice: ComptesService, private router:Router) {}
+  compte: any ;
+
+  constructor(private comptesService: ComptesService, private router:Router) {}
 
   ngOnInit(): void {
     this.getAllComptes(); // Corrected to use 'this'
   }
 
   getAllComptes() {
-    this.compteservice.getComptes().subscribe((res: any) => {
+    this.comptesService.getComptes().subscribe((res: any) => {
       console.log("API response:", res); // Add this to see the structure of `res`
       this.comptes = res;
     });
+  }
+
+  getOneCompte(codeCompte: string){
+    this.comptesService.getCompte(codeCompte).subscribe(
+      (data) => this.compte = data,
+      (error) => console.error('Error fetching compte:', error)
+    );
   }
 
 }
