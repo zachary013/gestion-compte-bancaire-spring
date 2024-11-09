@@ -123,6 +123,9 @@
             <strong>Nom:</strong> {{ selectedClient.nomClient }}
           </div>
           <div class="mb-3">
+            <strong>Email:</strong> {{ selectedClient.email || 'Non renseigné' }}
+          </div>
+          <div class="mb-3">
             <strong>Date de Naissance:</strong> {{ selectedClient.dateNaissance | date:'dd/MM/yyyy' }}
           </div>
           <div class="mb-3">

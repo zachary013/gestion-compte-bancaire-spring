@@ -41,6 +41,7 @@ public class ClientMetierImpl implements ClientMetier {
     public Client updateClient(Long codeClient, Client updatedClient) {
         Client client = consulterClient(codeClient);
         client.setNomClient(updatedClient.getNomClient() != null ? updatedClient.getNomClient() : client.getNomClient());
+        client.setEmail(updatedClient.getEmail() != null ? updatedClient.getEmail() : client.getEmail()); // Add this line
         client.setDateNaissance(updatedClient.getDateNaissance() != null ? updatedClient.getDateNaissance() : client.getDateNaissance());
         client.setTelephone(updatedClient.getTelephone() != null ? updatedClient.getTelephone() : client.getTelephone());
         client.setAdresse(updatedClient.getAdresse() != null ? updatedClient.getAdresse() : client.getAdresse());

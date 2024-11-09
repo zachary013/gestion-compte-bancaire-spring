@@ -19,7 +19,7 @@ public class Client implements Serializable {
     @NotNull(message = "Le nom du client est obligatoire.")
     @Size(min = 2, max = 50, message = "Le nom du client doit être entre 2 et 50 caractères.")
     private String nomClient;
-
+    private String email;
     private Date dateNaissance;
     private String telephone;
     private String adresse;

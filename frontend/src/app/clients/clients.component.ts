@@ -89,14 +89,38 @@ export class ClientsComponent implements OnInit {
 
   saveEditedClient() {
     if (this.selectedClient && this.editForm.valid) {
-      this.clientService.updateClient(this.selectedClient.codeClient, this.selectedClient)
+      // Create a clean copy of the client data
+      const clientToUpdate = {
+        codeClient: this.selectedClient.codeClient,
+        nomClient: this.selectedClient.nomClient,
+        dateNaissance: this.selectedClient.dateNaissance,
+        telephone: this.selectedClient.telephone,
+        adresse: this.selectedClient.adresse,
+        ville: this.selectedClient.ville,
+        pays: this.selectedClient.pays,
+        email: this.selectedClient.email
+      };
+
+      // Format date if it exists
+      if (clientToUpdate.dateNaissance) {
+        clientToUpdate.dateNaissance = new Date(clientToUpdate.dateNaissance)
+          .toISOString().split('T')[0];
+      }
+
+      this.clientService.updateClient(clientToUpdate.codeClient, clientToUpdate)
         .subscribe({
-          next: () => {
+          next: (response) => {
+            console.log('Client updated successfully:', response);
             this.getAllClients();
             this.modals['editModal']?.hide();
             this.selectedClient = null;
+            this.errorMessage = '';
           },
-          error: () => this.errorMessage = 'Erreur lors de la mise à jour du client'
+          error: (error) => {
+            console.error('Error updating client:', error);
+            this.errorMessage = 'Erreur lors de la mise à jour du client: ' +
+              (error.error?.message || 'Une erreur est survenue');
+          }
         });
     }
   }
@@ -114,7 +138,10 @@ export class ClientsComponent implements OnInit {
           this.modals['deleteModal']?.hide();
           this.clientToDelete = null;
         },
-        error: () => this.errorMessage = 'Erreur lors de la suppression du client'
+        error: (error) => {
+          console.error('Error deleting client:', error);
+          this.errorMessage = 'Erreur lors de la suppression du client';
+        }
       });
     }
   }
