@@ -32,9 +32,10 @@
           <td>{{ compte.codeClient }}</td>
           <td>{{ compte.codeEmploye }}</td>
           <td>
-            <button class="btn btn-info" (click)="getOneCompte(compte.codeCompte)">
+            <button class="btn btn-info" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#exampleModal">
               View Details
             </button>
+
           </td>
         </tr>
         </tbody>
@@ -47,36 +48,28 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Compte Details</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <!-- Single Compte Details -->
+          <div *ngIf="compte" class="mt-4">
+                <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
+                <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
+                <p><strong>Date Creation:</strong> {{ compte.dateCreation }}</p>
+                <p><strong>Solde:</strong> {{ compte.solde }}</p>
+                <p><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
+                <p><strong>Taux:</strong> {{ compte.taux }}%</p>
+                <p><strong>Code Client:</strong> {{ compte.codeClient }}</p>
+                <p><strong>Code Employee:</strong> {{ compte.codeEmploye }}</p>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Single Compte Details -->
-  <div *ngIf="compte" class="mt-4">
-    <div class="card">
-      <div class="card-header">
-        <h5>Compte Details</h5>
-      </div>
-      <div class="card-body">
-        <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
-        <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
-        <p><strong>Date Creation:</strong> {{ compte.dateCreation }}</p>
-        <p><strong>Solde:</strong> {{ compte.solde }}</p>
-        <p><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
-        <p><strong>Taux:</strong> {{ compte.taux }}%</p>
-        <p><strong>Code Client:</strong> {{ compte.codeClient }}</p>
-        <p><strong>Code Employee:</strong> {{ compte.codeEmploye }}</p>
-      </div>
-    </div>
-  </div>
+
 </div>
