@@ -1,150 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Layout</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Optional: Add some spacing between cards */
-    .card {
-      margin-bottom: 20px;
-    }
-    .btn-med:hover{
-      gap: 10px !important;
-      transition: .2s;
-    }
-
-  </style>
-</head>
-<body class="bg-transparent">
-
-<div class="container" style="min-height: 100vh">
-  <div class="row">
-    <!-- First Card in Row 1 -->
-    <div class="col-md-4">
-      <div class="card rounded-2 bg-primary text-white ">
-        <div class=" card-header d-flex justify-content-between align-items-center ">
-          <h5 class="card-title ">Clients</h5>
-          <h6>x200</h6>
-        </div>
-
-        <div class="card-body ">
-          <a href="#" routerLink="/clients" class="text-decoration-none text-white  d-flex align-items-center gap-2  btn-med" ><div>View Clients</div> <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Second Card in Row 1 -->
-    <div class="col-md-4">
-      <div class="card rounded-2 bg-warning text-white ">
-        <div class=" card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title">Versement</h5>
-          <h6>x200</h6>
-        </div>
-        <div class="card-body ">
-          <a href="#" routerLink="/clients" class="text-decoration-none text-white  d-flex align-items-center gap-2  btn-med" ><div>View Versement</div> <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card rounded-2 bg-danger text-white ">
-        <div class=" card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title">Virement</h5>
-          <h6>x200</h6>
-        </div>
-        <div class="card-body ">
-          <a href="#" routerLink="/clients" class="text-decoration-none text-white  d-flex align-items-center gap-2  btn-med" ><div>View Virement</div> <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-
-      </div>
-    </div>
+<div class="container pb-2">
+  <div *ngIf="showAlert" class="alert alert-danger" role="alert">
+    Employee Deleted Successfully
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h5>Stats</h5>
-        </div>
 
-        <div class="card-body">
-          <img src="/stats.png" class="w-100"/>
-        </div>
+
+  <!-- Card for Comptes List -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h5 class="mb-0">Comptes List</h5>
+      <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-employee">
+          Create
+        </button>
+
       </div>
-
-
-    </div>
-
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header ">
-          <h5>Stats</h5>
-        </div>
-
-        <div class="card-body">
-          <img src="/stats2.jpg" class="w-100"/>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="card    ">
-    <div class="card-header   ">
-      <h5 class=" mb-0">Comptes List</h5>
     </div>
     <div class="card-body">
-      <!-- Comptes Table -->
+      <!-- employee Table -->
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">Type Compte</th>
-          <th scope="col">Code Compte</th>
-          <th scope="col">Date Creation</th>
-          <th scope="col">Solde</th>
-          <th scope="col">Decouvert</th>
-          <th scope="col">Taux</th>
-          <th scope="col">Code Client</th>
-          <th scope="col">Code Employee</th>
+
+
+          <th scope="col">Code Employe</th>
+          <th scope="col">Nom Employe</th>
+          <th scope="col">Code Emp Sup</th>
+          <th scope="col">Actions</th>
+
+
         </tr>
         </thead>
-        <tbody id="comptesTableBody">
-        <!-- Example rows; replace with dynamic content -->
-        <tr>
-          <td>Checking</td>
-          <td>CP12345</td>
-          <td>2023-01-15</td>
-          <td>5000</td>
-          <td>1000</td>
-          <td>1.5%</td>
-          <td>CL001</td>
-          <td>EMP001</td>
+        <tbody>
+        <!-- Loop through comptes and display each one -->
+        <tr *ngFor="let employee of employees">
+          <td>{{ employee.codeEmploye }}</td>
+          <td>{{ employee.nomEmploye }}</td>
+          <td>{{ employee.subEmployes }}</td>
+
+          <td class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Comptes
+            </button>
+            <button class="btn btn-warning" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#operations">
+              Operations
+            </button>
+            <button class="btn btn-success" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#operations">
+              Update
+            </button>
+            <button class="btn btn-danger" (click)="deleteEmployee(employee.codeEmploye)"  >
+              Delete
+            </button>
+
+          </td>
         </tr>
-        <tr>
-          <td>Savings</td>
-          <td>CP67890</td>
-          <td>2022-07-30</td>
-          <td>15000</td>
-          <td>2000</td>
-          <td>1.0%</td>
-          <td>CL002</td>
-          <td>EMP002</td>
-        </tr>
-        <!-- More rows will be populated here -->
         </tbody>
       </table>
     </div>
   </div>
 
+  <!-- show employee detail  -->
+  <div class="modal fade modal-xl" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Comptes</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="employee" class="mt-4">
+            <table class="table table-hover" >
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Code</th>
+                <th scope="col">Solde</th>
+                <th scope="col">Date Creation</th>
+                <th scope="col">Decouvert</th>
+                <th scope="col">Actions</th>
+              </tr>
+              </thead>
+              <tbody *ngFor="let compte of employee.comptes; let i = index">
+              <tr>
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ compte.codeCompte }}</td>
+                <td>{{ compte.solde }}</td>
+                <td>{{ compte.dateCreation }}</td>
+                <td>{{ compte.decouvert }}</td>
+                <td>
+                  <button class="btn btn-primary"  >
+                    action
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- operations -->
+  <div class="modal fade modal-xl" id="operations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="operationLabel">Operations</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="employee" class="mt-4">
+            <table class="table table-hover" >
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">DTYPE</th>
+                <th scope="col">numeroOperation</th>
+                <th scope="col">date Operation</th>
+                <th scope="col">montant</th>
+                <th scope="col">codeCpte</th>
+                <th scope="col">codeEmp</th>
+              </tr>
+              </thead>
+              <tbody *ngFor="let operation of employee.operations; let i = index">
+                <tr>
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ operation.DTYPE }}</td>
+                  <td>{{ operation.numeroOperation }}</td>
+                  <td>{{ operation.dateOperation }}</td>
+                  <td>{{ operation.montant }}</td>
+                  <td>{{ operation.codeCpte }}</td>
+                  <td>{{ operation.codeEmp }}</td>
+
+                </tr>
+              </tbody>
+            </table>
+
+           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- create -->
+  <div class="modal fade modal-xl" id="create-employee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="create-employeeLabel">Create Employee</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (click)="addEmployee()">
+            <div class="mb-3">
+              <label for="amountInput" class="form-label">Nom Employee</label>
+              <input type="text" class="form-control" id="amountInput" placeholder="Entrée le nom de l'employée" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
+            </div>
+            <div class="mb-3">
+              <label for="DD" class="form-label">CODE</label>
+              <input type="text" class="form-control" id="DD" placeholder="Entrée le nom de l'employée" [(ngModel)]="newEmployee.subEmployes" name="nomEmploye" required>
+            </div>
+ 
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>

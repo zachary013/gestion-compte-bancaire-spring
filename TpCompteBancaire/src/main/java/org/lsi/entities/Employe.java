@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -16,6 +14,8 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Employe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Employe implements Serializable {
     @JoinColumn(name = "CODE_EMP_SUP")
     private Employe employeSup;
 
-    @JsonManagedReference(value = "employe-sub")
+    @JsonManagedReference(value = "employe-sup")
     @OneToMany(mappedBy = "employeSup", fetch = FetchType.LAZY)
     private Collection<Employe> subEmployes;
 
@@ -41,7 +41,7 @@ public class Employe implements Serializable {
     private Collection<Groupe> groupes;
 
     @JsonManagedReference(value = "employe-compte")
-    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
     private Collection<Compte> comptes;
 
     @JsonManagedReference(value = "employe-operation")

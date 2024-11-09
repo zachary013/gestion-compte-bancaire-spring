@@ -31,6 +31,12 @@ public class EmployeMtierImpl implements EmployeMetier {
     }
 
     @Override
+    public Employe getEmploye(Long codeEmploye) {
+        return employeRepository.findById(codeEmploye)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
+
+    @Override
     @Transactional
     public void affecterEmployeGroupe(Long codeEmploye, Long codeGroupe) {
         Employe employe = employeRepository.findById(codeEmploye)
@@ -40,5 +46,13 @@ public class EmployeMtierImpl implements EmployeMetier {
 
         employe.getGroupes().add(groupe);
         employeRepository.save(employe);
+    }
+
+    @Override
+    public Long deleteEmploye(Long codeEmploye) {
+        Employe employe = employeRepository.findById(codeEmploye)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        employeRepository.delete(employe);
+        return employe.getCodeEmploye();
     }
 }

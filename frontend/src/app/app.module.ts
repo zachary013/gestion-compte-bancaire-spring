@@ -12,6 +12,9 @@ import { ClientsComponent } from './clients/clients.component';
 import { ComptesComponent } from './comptes/comptes.component';
 import {HttpClientModule} from '@angular/common/http';
 import { OperationComponent } from './operation/operation.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { GroupsComponent } from './groups/groups.component';
+import {Select2Module} from "ng-select2-component";
 
 @NgModule({
   declarations: [
@@ -23,13 +26,16 @@ import { OperationComponent } from './operation/operation.component';
     VirementComponent,
     ClientsComponent,
     ComptesComponent,
-    OperationComponent
+    OperationComponent,
+    DashboardComponent,
+    GroupsComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        Select2Module
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -24,10 +24,21 @@ public class EmployeRestService {
         return employeMetier.listEmployes();
     }
 
+    @GetMapping("/{codeEmploye}")
+    public Employe getOneEmploye(@PathVariable Long codeEmploye){
+        return employeMetier.getEmploye(codeEmploye);
+    }
+
+    @DeleteMapping("/{codeEmploye}")
+    public Long deleteOneEmploye(@PathVariable Long codeEmploye) {
+        return employeMetier.deleteEmploye(codeEmploye);
+    }
+
     @PutMapping("/{codeEmploye}/groupes/{codeGroupe}")
     public void affecterEmployeGroupe(
             @PathVariable Long codeEmploye,
-            @PathVariable Long codeGroupe) {
+            @PathVariable Long codeGroupe
+    ) {
         employeMetier.affecterEmployeGroupe(codeEmploye, codeGroupe);
     }
 }
