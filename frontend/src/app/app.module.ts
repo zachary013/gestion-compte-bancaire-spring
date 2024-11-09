@@ -12,6 +12,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { ComptesComponent } from './comptes/comptes.component';
 import {HttpClientModule} from '@angular/common/http';
 import { OperationComponent } from './operation/operation.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -25,11 +26,12 @@ import { OperationComponent } from './operation/operation.component';
     ComptesComponent,
     OperationComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
