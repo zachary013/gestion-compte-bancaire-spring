@@ -8,4 +8,7 @@ public interface ClientMetier {
     public Client saveClient(Client c);
     public List<Client> listClient();
     public List<Compte> getComptesClient(Long codeClient);
+    public Client consulterClient(Long codeClient);
+    public Client updateClient(Long codeClient, Client updatedClient);
+    public void deleteClient(Long codeClient);
 }

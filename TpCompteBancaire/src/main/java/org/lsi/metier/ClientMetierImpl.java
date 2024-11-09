@@ -30,4 +30,31 @@ public class ClientMetierImpl implements ClientMetier {
                 .orElseThrow(() -> new RuntimeException("Client non trouvé"));
         return new ArrayList<>(client.getComptes());
     }
+
+    @Override
+    public Client consulterClient(Long codeClient) {
+        return clientRepository.findById(codeClient)
+                .orElseThrow(() -> new RuntimeException("Client non trouvé avec le code: " + codeClient));
+    }
+
+    @Override
+    public Client updateClient(Long codeClient, Client updatedClient) {
+        Client client = consulterClient(codeClient);
+        client.setNomClient(updatedClient.getNomClient() != null ? updatedClient.getNomClient() : client.getNomClient());
+        client.setEmail(updatedClient.getEmail() != null ? updatedClient.getEmail() : client.getEmail()); // Add this line
+        client.setDateNaissance(updatedClient.getDateNaissance() != null ? updatedClient.getDateNaissance() : client.getDateNaissance());
+        client.setTelephone(updatedClient.getTelephone() != null ? updatedClient.getTelephone() : client.getTelephone());
+        client.setAdresse(updatedClient.getAdresse() != null ? updatedClient.getAdresse() : client.getAdresse());
+        client.setVille(updatedClient.getVille() != null ? updatedClient.getVille() : client.getVille());
+        client.setPays(updatedClient.getPays() != null ? updatedClient.getPays() : client.getPays());
+        return clientRepository.save(client);
+    }
+
+    @Override
+    public void deleteClient(Long codeClient) {
+        if (!clientRepository.existsById(codeClient)) {
+            throw new RuntimeException("Client non trouvé avec le code: " + codeClient);
+        }
+        clientRepository.deleteById(codeClient);
+    }
 }

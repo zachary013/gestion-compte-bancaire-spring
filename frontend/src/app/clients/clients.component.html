@@ -1,74 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client List</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-</head>
-<body class="bg-transparent">
-
 <div class="container pb-2">
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+  </div>
+
   <!-- Card for Client List -->
-  <div class="card   ">
-    <div class="card-header   ">
-      <h5 class="mb-0">Client List</h5>
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Liste des Clients</h5>
+      <button class="btn btn-primary btn-sm" (click)="openAddClientModal()">
+        <i class="bi bi-plus-circle"></i> Ajouter Client
+      </button>
     </div>
     <div class="card-body">
-      <!-- Clients Table -->
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">Code Client</th>
-          <th scope="col">Nom Client</th>
-          <th scope="col">Action</th>
+          <th>Code Client</th>
+          <th>Nom Client</th>
+          <th>Email</th>
+          <th>Adresse</th>
+          <th>Actions</th>
         </tr>
         </thead>
-        <tbody id="clientTableBody">
-        <!-- Example rows; replace with dynamic content -->
+        <tbody>
         <tr *ngFor="let client of clients">
-          <td>{{client.codeClient}}</td>
-          <td>{{client.nomClient}}</td>
+          <td>{{ client.codeClient }}</td>
+          <td>{{ client.nomClient }}</td>
+          <td>{{ client.email || 'Non renseigné' }}</td>
+          <td>{{ client.adresse || 'Non renseignée' }}</td>
           <td>
-            <div class="btn btn-primary">
-              View
-            </div>
+            <button class="btn btn-info btn-sm me-1" (click)="viewDetails(client)">
+              <i class="bi bi-eye"></i> Détails
+            </button>
+            <button class="btn btn-warning btn-sm me-1" (click)="editClient(client)">
+              <i class="bi bi-pencil"></i> Modifier
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteClientConfirm(client)">
+              <i class="bi bi-trash"></i> Supprimer
+            </button>
           </td>
         </tr>
-        <!-- More rows will be populated here -->
+        <tr *ngIf="clients.length === 0">
+          <td colspan="5" class="text-center">Aucun client trouvé</td>
+        </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <!-- Add Client Modal -->
+  <div class="modal fade" id="addClientModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un nouveau client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form #addForm="ngForm" (ngSubmit)="addClient()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="newNomClient" class="form-label">Nom Client</label>
+              <input type="text" class="form-control" id="newNomClient" name="nomClient"
+                     [(ngModel)]="newClient.nomClient" required>
+            </div>
+            <div class="mb-3">
+              <label for="newEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="newEmail" name="email"
+                     [(ngModel)]="newClient.email">
+            </div>
+            <div class="mb-3">
+              <label for="newDateNaissance" class="form-label">Date de Naissance</label>
+              <input type="date" class="form-control" id="newDateNaissance" name="dateNaissance"
+                     [(ngModel)]="newClient.dateNaissance">
+            </div>
+            <div class="mb-3">
+              <label for="newAdresse" class="form-label">Adresse</label>
+              <input type="text" class="form-control" id="newAdresse" name="adresse"
+                     [(ngModel)]="newClient.adresse">
+            </div>
+            <div class="mb-3">
+              <label for="newTelephone" class="form-label">Téléphone</label>
+              <input type="text" class="form-control" id="newTelephone" name="telephone"
+                     [(ngModel)]="newClient.telephone">
+            </div>
+            <div class="mb-3">
+              <label for="newVille" class="form-label">Ville</label>
+              <input type="text" class="form-control" id="newVille" name="ville"
+                     [(ngModel)]="newClient.ville">
+            </div>
+            <div class="mb-3">
+              <label for="newPays" class="form-label">Pays</label>
+              <input type="text" class="form-control" id="newPays" name="pays"
+                     [(ngModel)]="newClient.pays">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!addForm.form.valid">
+              Ajouter
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Details Modal -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Détails du Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" *ngIf="selectedClient">
+          <div class="mb-3">
+            <strong>Code Client:</strong> {{ selectedClient.codeClient }}
+          </div>
+          <div class="mb-3">
+            <strong>Nom:</strong> {{ selectedClient.nomClient }}
+          </div>
+          <div class="mb-3">
+            <strong>Email:</strong> {{ selectedClient.email || 'Non renseigné' }}
+          </div>
+          <div class="mb-3">
+            <strong>Date de Naissance:</strong> {{ selectedClient.dateNaissance | date:'dd/MM/yyyy' }}
+          </div>
+          <div class="mb-3">
+            <strong>Téléphone:</strong> {{ selectedClient.telephone || 'Non renseigné' }}
+          </div>
+          <div class="mb-3">
+            <strong>Adresse:</strong> {{ selectedClient.adresse || 'Non renseignée' }}
+          </div>
+          <div class="mb-3">
+            <strong>Ville:</strong> {{ selectedClient.ville || 'Non renseignée' }}
+          </div>
+          <div class="mb-3">
+            <strong>Pays:</strong> {{ selectedClient.pays || 'Non renseigné' }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier le Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form #editForm="ngForm" (ngSubmit)="saveEditedClient()" *ngIf="selectedClient">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="nomClient" class="form-label">Nom Client</label>
+              <input type="text" class="form-control" id="nomClient" name="nomClient"
+                     [(ngModel)]="selectedClient.nomClient" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email"
+                     [(ngModel)]="selectedClient.email">
+            </div>
+            <div class="mb-3">
+              <label for="dateNaissance" class="form-label">Date de Naissance</label>
+              <input type="date" class="form-control" id="dateNaissance" name="dateNaissance"
+                     [(ngModel)]="selectedClient.dateNaissance">
+            </div>
+            <div class="mb-3">
+              <label for="adresse" class="form-label">Adresse</label>
+              <input type="text" class="form-control" id="adresse" name="adresse"
+                     [(ngModel)]="selectedClient.adresse">
+            </div>
+            <div class="mb-3">
+              <label for="telephone" class="form-label">Téléphone</label>
+              <input type="text" class="form-control" id="telephone" name="telephone"
+                     [(ngModel)]="selectedClient.telephone">
+            </div>
+            <div class="mb-3">
+              <label for="ville" class="form-label">Ville</label>
+              <input type="text" class="form-control" id="ville" name="ville"
+                     [(ngModel)]="selectedClient.ville">
+            </div>
+            <div class="mb-3">
+              <label for="pays" class="form-label">Pays</label>
+              <input type="text" class="form-control" id="pays" name="pays"
+                     [(ngModel)]="selectedClient.pays">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmation de suppression</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" *ngIf="clientToDelete">
+          Êtes-vous sûr de vouloir supprimer le client "{{ clientToDelete.nomClient }}" ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Example JavaScript for dynamically adding rows (if needed)
-  // This is just a placeholder and should be replaced by actual data fetching logic
-  document.addEventListener("DOMContentLoaded", function() {
-    const clients = [
-      { code_client: "004", nom_client: "Client D" },
-      { code_client: "005", nom_client: "Client E" },
-    ];
-
-    const tableBody = document.getElementById("clientTableBody");
-
-    clients.forEach(client => {
-      const row = document.createElement("tr");
-
-      const codeCell = document.createElement("td");
-      codeCell.textContent = client.code_client;
-      row.appendChild(codeCell);
-
-      const nameCell = document.createElement("td");
-      nameCell.textContent = client.nom_client;
-      row.appendChild(nameCell);
-
-      tableBody.appendChild(row);
-    });
-  });
-</script>
-</body>
-</html>

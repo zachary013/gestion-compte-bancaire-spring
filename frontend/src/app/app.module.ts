@@ -12,9 +12,13 @@ import { ClientsComponent } from './clients/clients.component';
 import { ComptesComponent } from './comptes/comptes.component';
 import {HttpClientModule} from '@angular/common/http';
 import { OperationComponent } from './operation/operation.component';
+<<<<<<< HEAD
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupsComponent } from './groups/groups.component';
 import {Select2Module} from "ng-select2-component";
+=======
+import {FormsModule} from "@angular/forms";
+>>>>>>> 627cfcb40396df3c6a5a7d0a3d92ffb3714b4748
 
 @NgModule({
   declarations: [
@@ -26,15 +30,23 @@ import {Select2Module} from "ng-select2-component";
     VirementComponent,
     ClientsComponent,
     ComptesComponent,
+<<<<<<< HEAD
     OperationComponent,
     DashboardComponent,
     GroupsComponent
+=======
+    OperationComponent
+>>>>>>> 627cfcb40396df3c6a5a7d0a3d92ffb3714b4748
   ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+<<<<<<< HEAD
         Select2Module
+=======
+        FormsModule
+>>>>>>> 627cfcb40396df3c6a5a7d0a3d92ffb3714b4748
     ],
   providers: [],
   bootstrap: [AppComponent]
