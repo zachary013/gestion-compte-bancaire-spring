@@ -6,5 +6,6 @@ public interface GroupeMetier {
     Groupe saveGroupe(Groupe groupe);
     List<Groupe> listGroupes();
     Groupe getGroupe(Long id);
+    Groupe updateGroupe(Long id, Groupe newGroupeData);
     void deleteGroupe(Long id);
 }

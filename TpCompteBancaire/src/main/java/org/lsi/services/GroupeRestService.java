@@ -30,6 +30,11 @@ public class GroupeRestService {
         return groupeMetier.getGroupe(id);
     }
 
+    @PutMapping("/{codeGroupe}")
+    public Groupe updateGroupe(@PathVariable Long codeGroupe, @RequestBody Groupe groupe) {
+        return groupeMetier.updateGroupe(codeGroupe, groupe);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteGroupe(@PathVariable Long id) {
         groupeMetier.deleteGroupe(id);
