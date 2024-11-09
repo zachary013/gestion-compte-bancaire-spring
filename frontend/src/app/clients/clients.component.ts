@@ -1,4 +1,3 @@
-// clients.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ClientService } from '../client.service';
@@ -11,13 +10,14 @@ import { Modal } from 'bootstrap';
 })
 export class ClientsComponent implements OnInit {
   @ViewChild('editForm') editForm!: NgForm;
+  @ViewChild('addForm') addForm!: NgForm;
 
   clients: any[] = [];
   selectedClient: any = null;
   clientToDelete: any = null;
   newClient: any = {
-    codeClient: '',
     nomClient: '',
+    email: '',
     dateNaissance: '',
     telephone: '',
     adresse: '',
@@ -27,6 +27,7 @@ export class ClientsComponent implements OnInit {
   errorMessage: string = '';
 
   private modals: { [key: string]: Modal } = {};
+
   constructor(private clientService: ClientService) {}
 
   ngOnInit(): void {
@@ -45,42 +46,36 @@ export class ClientsComponent implements OnInit {
 
   getAllClients() {
     this.clientService.getClients().subscribe({
-      next: (res: any) => {
-        console.log('Clients fetched:', res);  // Ajoutez ce log pour voir les données récupérées
-        this.clients = res;
-        this.errorMessage = '';
-      },
-      error: (error) => {
-        console.error('Error fetching clients:', error);
-        this.errorMessage = 'Erreur lors du chargement des clients';
-      }
+      next: (res) => this.clients = res,
+      error: (error) => this.errorMessage = 'Erreur lors du chargement des clients'
     });
   }
 
+  openAddClientModal() {
+    this.newClient = {
+      nomClient: '',
+      email: '',
+      dateNaissance: '',
+      telephone: '',
+      adresse: '',
+      ville: '',
+      pays: ''
+    };
+    this.modals['addClientModal']?.show();
+  }
+
   addClient() {
-    if (this.newClient) {
+    if (this.addForm.valid) {
       this.clientService.add(this.newClient).subscribe({
         next: () => {
           this.getAllClients();
           this.modals['addClientModal']?.hide();
-          this.newClient = {
-            codeClient: '',
-            nomClient: '',
-            dateNaissance: '',
-            telephone: '',
-            adresse: '',
-            ville: '',
-            pays: ''
-          };
+          this.newClient = { nomClient: '', email: '', dateNaissance: '', telephone: '', adresse: '', ville: '', pays: '' };
         },
-        error: (error) => {
-          console.error('Error adding client:', error);
-          this.errorMessage = 'Erreur lors de l\'ajout du client';
-        }
+        error: () => this.errorMessage = "Erreur lors de l'ajout du client"
       });
     }
   }
-
 
   viewDetails(client: any) {
     this.selectedClient = {...client};
@@ -94,17 +89,15 @@ export class ClientsComponent implements OnInit {
 
   saveEditedClient() {
     if (this.selectedClient && this.editForm.valid) {
-      this.clientService.updateClient(this.selectedClient.codeClient, this.selectedClient).subscribe({
-        next: () => {
-          this.getAllClients();
-          this.modals['editModal']?.hide();
-          this.selectedClient = null;
-        },
-        error: (error) => {
-          console.error('Error updating client:', error);
-          this.errorMessage = 'Erreur lors de la mise à jour du client';
-        }
-      });
+      this.clientService.updateClient(this.selectedClient.codeClient, this.selectedClient)
+        .subscribe({
+          next: () => {
+            this.getAllClients();
+            this.modals['editModal']?.hide();
+            this.selectedClient = null;
+          },
+          error: () => this.errorMessage = 'Erreur lors de la mise à jour du client'
+        });
     }
   }
 
@@ -121,10 +114,7 @@ export class ClientsComponent implements OnInit {
           this.modals['deleteModal']?.hide();
           this.clientToDelete = null;
         },
-        error: (error) => {
-          console.error('Error deleting client:', error);
-          this.errorMessage = 'Erreur lors de la suppression du client';
-        }
+        error: () => this.errorMessage = 'Erreur lors de la suppression du client'
       });
     }
   }

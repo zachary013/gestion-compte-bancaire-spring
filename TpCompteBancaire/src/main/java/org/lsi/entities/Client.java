@@ -2,10 +2,12 @@ package org.lsi.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Data
@@ -13,40 +15,25 @@ public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeClient;
+
+    @NotNull(message = "Le nom du client est obligatoire.")
+    @Size(min = 2, max = 50, message = "Le nom du client doit être entre 2 et 50 caractères.")
     private String nomClient;
 
+    private Date dateNaissance;
+    private String telephone;
+    private String adresse;
+    private String ville;
+    private String pays;
+
     @JsonManagedReference(value = "client-compte")
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Compte> comptes;
 
+    // Constructor
     public Client() {}
 
     public Client(String nomClient) {
         this.nomClient = nomClient;
-    }
-
-    // Getters and setters
-    public Long getCodeClient() {
-        return codeClient;
-    }
-
-    public void setCodeClient(Long codeClient) {
-        this.codeClient = codeClient;
-    }
-
-    public String getNomClient() {
-        return nomClient;
-    }
-
-    public void setNomClient(String nomClient) {
-        this.nomClient = nomClient;
-    }
-
-    public Collection<Compte> getComptes() {
-        return comptes;
-    }
-
-    public void setComptes(Collection<Compte> comptes) {
-        this.comptes = comptes;
     }
 }

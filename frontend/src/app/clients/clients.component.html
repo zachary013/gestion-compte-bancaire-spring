@@ -9,8 +9,8 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="mb-0">Liste des Clients</h5>
-      <button class="btn btn-primary btn-sm">
-        <i class="bi bi-arrow-clockwise"></i> Actualiser
+      <button class="btn btn-primary btn-sm" (click)="openAddClientModal()">
+        <i class="bi bi-plus-circle"></i> Ajouter Client
       </button>
     </div>
     <div class="card-body">
@@ -47,6 +47,63 @@
         </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Add Client Modal -->
+  <div class="modal fade" id="addClientModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un nouveau client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form #addForm="ngForm" (ngSubmit)="addClient()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="newNomClient" class="form-label">Nom Client</label>
+              <input type="text" class="form-control" id="newNomClient" name="nomClient"
+                     [(ngModel)]="newClient.nomClient" required>
+            </div>
+            <div class="mb-3">
+              <label for="newEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="newEmail" name="email"
+                     [(ngModel)]="newClient.email">
+            </div>
+            <div class="mb-3">
+              <label for="newDateNaissance" class="form-label">Date de Naissance</label>
+              <input type="date" class="form-control" id="newDateNaissance" name="dateNaissance"
+                     [(ngModel)]="newClient.dateNaissance">
+            </div>
+            <div class="mb-3">
+              <label for="newAdresse" class="form-label">Adresse</label>
+              <input type="text" class="form-control" id="newAdresse" name="adresse"
+                     [(ngModel)]="newClient.adresse">
+            </div>
+            <div class="mb-3">
+              <label for="newTelephone" class="form-label">Téléphone</label>
+              <input type="text" class="form-control" id="newTelephone" name="telephone"
+                     [(ngModel)]="newClient.telephone">
+            </div>
+            <div class="mb-3">
+              <label for="newVille" class="form-label">Ville</label>
+              <input type="text" class="form-control" id="newVille" name="ville"
+                     [(ngModel)]="newClient.ville">
+            </div>
+            <div class="mb-3">
+              <label for="newPays" class="form-label">Pays</label>
+              <input type="text" class="form-control" id="newPays" name="pays"
+                     [(ngModel)]="newClient.pays">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!addForm.form.valid">
+              Ajouter
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 

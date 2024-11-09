@@ -25,6 +25,7 @@ export class ClientService {
   }
 
   updateClient(id: number, data: any): Observable<any> {
+    console.log(`Updating client with ID: ${id}`, data);
     return this.httpClient.put(`${this.url}/clients/${id}`, data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
