@@ -10,14 +10,14 @@ export class EmployeesService {
   url = "http://localhost:8081" ;
   constructor(private httpClient:HttpClient) { }
 
-  add(data:any){
+  add(data:any): Observable<any>{
     return this.httpClient.post(this.url+
       "/employes",data, {
       headers: new HttpHeaders().set('Content-Type','application/json')
     })
   }
 
-  addEmployee(employee: any): Observable<any> {
+  addEmployee(employee: any) {
     return this.httpClient.post<any>(this.url+ "/employes", employee); // Adjust the URL for adding employee
   }
 

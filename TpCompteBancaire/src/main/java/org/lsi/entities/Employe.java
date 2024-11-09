@@ -9,19 +9,17 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Collection;
-
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@RequiredArgsConstructor
 public class Employe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeEmploye;
 
     @NotBlank(message = "Le nom de l'employé ne peut pas être vide")
+    @NonNull
     private String nomEmploye;
 
     @JsonBackReference(value = "employe-sup")
@@ -31,7 +29,7 @@ public class Employe implements Serializable {
 
     @JsonManagedReference(value = "employe-sup")
     @OneToMany(mappedBy = "employeSup", fetch = FetchType.LAZY)
-    private Collection<Employe> subEmployes;
+    private Collection<Employe> supEmployes;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -41,14 +39,10 @@ public class Employe implements Serializable {
     private Collection<Groupe> groupes;
 
     @JsonManagedReference(value = "employe-compte")
-    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Compte> comptes;
 
     @JsonManagedReference(value = "employe-operation")
-    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Operation> operations;
-
-    public Employe(String nomEmploye) {
-        this.nomEmploye = nomEmploye;
-    }
 }

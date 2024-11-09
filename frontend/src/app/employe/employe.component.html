@@ -36,7 +36,7 @@
         <tr *ngFor="let employee of employees">
           <td>{{ employee.codeEmploye }}</td>
           <td>{{ employee.nomEmploye }}</td>
-          <td>{{ employee.subEmployes }}</td>
+          <td>{{ employee.supEmployes }}</td>
 
           <td class="d-flex gap-2">
             <button class="btn btn-primary" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -159,16 +159,23 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form (click)="addEmployee()">
+          <form (ngSubmit)="addEmployee()">
             <div class="mb-3">
               <label for="amountInput" class="form-label">Nom Employee</label>
               <input type="text" class="form-control" id="amountInput" placeholder="Entrée le nom de l'employée" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
             </div>
             <div class="mb-3">
-              <label for="DD" class="form-label">CODE</label>
-              <input type="text" class="form-control" id="DD" placeholder="Entrée le nom de l'employée" [(ngModel)]="newEmployee.subEmployes" name="nomEmploye" required>
+              <label for="supEmployes" class="form-label">Supervising Employee</label>
+              <select class="form-select" id="supEmployes" [(ngModel)]="codeSupEmployee" name="subEmployes" required>
+                <option value="" disabled selected>Select Supervising Employee</option>
+                <option *ngFor="let emp of employees" [value]="emp.codeEmploye">
+                  {{ emp.nomEmploye }}
+                </option>
+              </select>
+
             </div>
- 
+
+
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Create</button>

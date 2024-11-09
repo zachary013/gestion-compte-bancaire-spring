@@ -44,9 +44,13 @@ public class EmployeMtierImpl implements EmployeMetier {
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé"));
 
-        employe.getGroupes().add(groupe);
-        employeRepository.save(employe);
+        // Check if the employe is already in the group to avoid duplicates
+        if (!employe.getGroupes().contains(groupe)) {
+            employe.getGroupes().add(groupe);
+            employeRepository.save(employe);
+        }
     }
+
 
     @Override
     public Long deleteEmploye(Long codeEmploye) {
