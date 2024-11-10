@@ -24,6 +24,7 @@ export class ClientsComponent implements OnInit {
     ville: '',
     pays: ''
   };
+  clientAccounts: any[] = [];
   errorMessage: string = '';
 
   private modals: { [key: string]: Modal } = {};
@@ -36,7 +37,7 @@ export class ClientsComponent implements OnInit {
   }
 
   private initializeModals() {
-    ['deleteModal', 'detailsModal', 'editModal', 'addClientModal'].forEach(modalId => {
+    ['deleteModal', 'detailsModal', 'editModal', 'addClientModal', 'accountsModal'].forEach(modalId => {
       const modalElement = document.getElementById(modalId);
       if (modalElement) {
         this.modals[modalId] = new Modal(modalElement);
@@ -66,7 +67,7 @@ export class ClientsComponent implements OnInit {
 
   addClient() {
     if (this.addForm.valid) {
-      this.clientService.add(this.newClient).subscribe({
+      this.clientService.addClient(this.newClient).subscribe({
         next: () => {
           this.getAllClients();
           this.modals['addClientModal']?.hide();
@@ -87,9 +88,22 @@ export class ClientsComponent implements OnInit {
     this.modals['editModal']?.show();
   }
 
+  viewAccounts(client: any) {
+    this.selectedClient = client;
+    this.clientService.getClientAccounts(client.codeClient).subscribe({
+      next: (accounts) => {
+        this.clientAccounts = accounts;
+        this.modals['accountsModal']?.show();
+      },
+      error: (error) => {
+        this.errorMessage = "Erreur lors de la récupération des comptes";
+        console.error('Error fetching client accounts:', error);
+      }
+    });
+  }
+
   saveEditedClient() {
     if (this.selectedClient && this.editForm.valid) {
-      // Create a clean copy of the client data
       const clientToUpdate = {
         codeClient: this.selectedClient.codeClient,
         nomClient: this.selectedClient.nomClient,
@@ -101,7 +115,6 @@ export class ClientsComponent implements OnInit {
         email: this.selectedClient.email
       };
 
-      // Format date if it exists
       if (clientToUpdate.dateNaissance) {
         clientToUpdate.dateNaissance = new Date(clientToUpdate.dateNaissance)
           .toISOString().split('T')[0];
@@ -109,15 +122,13 @@ export class ClientsComponent implements OnInit {
 
       this.clientService.updateClient(clientToUpdate.codeClient, clientToUpdate)
         .subscribe({
-          next: (response) => {
-            console.log('Client updated successfully:', response);
+          next: () => {
             this.getAllClients();
             this.modals['editModal']?.hide();
             this.selectedClient = null;
             this.errorMessage = '';
           },
           error: (error) => {
-            console.error('Error updating client:', error);
             this.errorMessage = 'Erreur lors de la mise à jour du client: ' +
               (error.error?.message || 'Une erreur est survenue');
           }
@@ -139,7 +150,6 @@ export class ClientsComponent implements OnInit {
           this.clientToDelete = null;
         },
         error: (error) => {
-          console.error('Error deleting client:', error);
           this.errorMessage = 'Erreur lors de la suppression du client';
         }
       });

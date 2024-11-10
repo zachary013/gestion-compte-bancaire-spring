@@ -34,6 +34,9 @@
             <button class="btn btn-info btn-sm me-1" (click)="viewDetails(client)">
               <i class="bi bi-eye"></i> Détails
             </button>
+            <button class="btn btn-primary btn-sm me-1" (click)="viewAccounts(client)">
+              <i class="bi bi-list"></i> Comptes
+            </button>
             <button class="btn btn-warning btn-sm me-1" (click)="editClient(client)">
               <i class="bi bi-pencil"></i> Modifier
             </button>
@@ -147,6 +150,49 @@
       </div>
     </div>
   </div>
+
+  <!-- Client Accounts Modal -->
+  <div class="modal fade" id="accountsModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Comptes du Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="clientAccounts && clientAccounts.length > 0">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Solde</th>
+                <th>Taux</th>
+                <th>Decouvert</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let compte of clientAccounts">
+                <td>{{ compte.codeCompte }}</td>
+                <td>{{ compte.typeCompte }}</td>
+                <td>{{ compte.solde }}</td>
+                <td>{{ compte.taux }}</td>
+                <td>{{ compte.decouvert }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <p *ngIf="!clientAccounts || clientAccounts.length === 0">
+            Aucun compte trouvé pour ce client.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Edit Modal -->
   <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static">

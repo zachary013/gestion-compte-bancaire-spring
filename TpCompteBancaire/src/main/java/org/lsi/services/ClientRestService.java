@@ -1,8 +1,10 @@
 package org.lsi.services;
 
 import java.util.List;
-import org.lsi.entities.Client;
-import org.lsi.entities.Compte;
+
+import org.lsi.dto.ClientRequest;
+import org.lsi.dto.ClientResponse;
+import org.lsi.dto.CompteResponse;
 import org.lsi.metier.ClientMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,34 +20,38 @@ public class ClientRestService {
     private ClientMetier clientMetier;
 
     @PostMapping
-    public ResponseEntity<Client> saveClient(@RequestBody Client client) {
-        return ResponseEntity.ok(clientMetier.saveClient(client));
+    public ResponseEntity<ClientResponse> saveClient(@RequestBody ClientRequest clientRequest) {
+        ClientResponse clientResponse = clientMetier.saveClient(clientRequest);
+        return ResponseEntity.ok(clientResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<Client>> listClient() {
-        return ResponseEntity.ok(clientMetier.listClient());
+    public ResponseEntity<List<ClientResponse>> listClient() {
+        List<ClientResponse> clients = clientMetier.listClient();
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/{codeClient}/comptes")
-    public ResponseEntity<List<Compte>> getComptesClient(@PathVariable Long codeClient) {
-        return ResponseEntity.ok(clientMetier.getComptesClient(codeClient));
+    public ResponseEntity<List<CompteResponse>> getComptesClient(@PathVariable Long codeClient) {
+        List<CompteResponse> comptes = clientMetier.getComptesClient(codeClient);
+        return ResponseEntity.ok(comptes);
     }
 
     @GetMapping("/{codeClient}")
-    public ResponseEntity<Client> consulterClient(@PathVariable Long codeClient) {
-        return ResponseEntity.ok(clientMetier.consulterClient(codeClient));
+    public ResponseEntity<ClientResponse> consulterClient(@PathVariable Long codeClient) {
+        ClientResponse clientResponse = clientMetier.getClient(codeClient);
+        return ResponseEntity.ok(clientResponse);
     }
 
     @PutMapping("/{codeClient}")
-    public ResponseEntity<?> updateClient(@PathVariable Long codeClient, @RequestBody Client client) {
+    public ResponseEntity<?> updateClient(@PathVariable Long codeClient, @RequestBody ClientRequest clientRequest) {
         try {
-            return ResponseEntity.ok(clientMetier.updateClient(codeClient, client));
+            ClientResponse updatedClient = clientMetier.updateClient(codeClient, clientRequest);
+            return ResponseEntity.ok(updatedClient);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
 
     @DeleteMapping("/{codeClient}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long codeClient) {
