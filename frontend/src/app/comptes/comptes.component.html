@@ -33,8 +33,8 @@
           <td>{{ compte.codeCompte }}</td>
           <td>{{ compte.dateCreation | date }}</td>
           <td>{{ compte.solde }}</td>
-          <td>{{ compte.decouvert }}</td>
-          <td>{{ compte.taux }}%</td>
+          <td>{{ compte.typeCompte == 'CC' ? compte.decouvert : '-' }}</td>
+          <td>{{ compte.typeCompte == 'CE'? compte.taux : '-' }}%</td>
           <td>{{ compte.codeClient }}</td>
           <td>{{ compte.codeEmploye }}</td>
           <td class="">
@@ -77,16 +77,26 @@
                 <!-- Add more types as needed -->
               </select>
             </div>
-            <!-- Code Client Input -->
+
             <div class="mb-3">
-              <label for="codeClient" class="form-label">Code Client</label>
-              <input type="number" class="form-control" id="codeClient" [(ngModel)]="newCompte.codeClient" name="codeClient" required />
+              <label for="client" class="form-label">Clients</label>
+              <select class="form-select" id="client" [(ngModel)]="newCompte.codeClient"  name="typeCompte" required>
+                <option  *ngFor="let client of clients " [value]="client.codeClient">{{client.nomClient}}</option>
+              </select>
             </div>
-            <!-- Code Employee Input -->
+
             <div class="mb-3">
-              <label for="codeEmploye" class="form-label">Code Employee</label>
-              <input type="number" class="form-control" id="codeEmploye" [(ngModel)]="newCompte.codeEmploye" name="codeEmploye" required />
+              <label for="employe" class="form-label">Employee</label>
+              <select class="form-select" id="employe" [(ngModel)]="newCompte.codeEmploye"  name="typeCompte" required>
+                <option  *ngFor="let employee of employees " [value]="employee.codeEmploye">{{employee.nomEmploye}}</option>
+              </select>
             </div>
+
+            <div class="mb-3">
+              <label for="solde" class="form-label">Solde</label>
+              <input type="number" class="form-control" id="solde" [(ngModel)]="newCompte.solde" name="solde" required />
+            </div>
+
             <!-- Taux Input -->
             <div class="mb-3" *ngIf="newCompte.typeCompte == 'CE' ">
               <label for="taux" class="form-label">Taux</label>
@@ -118,10 +128,10 @@
             <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
             <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
             <p><strong>Solde:</strong> {{ compte.solde }}</p>
-            <p *ngIf="compte.typeCompte == 'CC'"><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
+            <p *ngIf="compte.typeCompte == 'CC'" ><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
             <p *ngIf="compte.typeCompte == 'CE'"><strong>Taux:</strong> {{ compte.taux }}%</p>
-            <p><strong>Code Client:</strong> {{ compte.client.codeClient }}</p>
-            <p><strong>Code Employee:</strong> {{ compte.employe.codeEmploye }}</p>
+            <p><strong>Code Client:</strong> {{ compte.codeEmploye }}</p>
+            <p><strong>Code Employee:</strong> {{ compte.codeClient }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -146,23 +156,23 @@
 
             <!-- Single Compte Details -->
             <div *ngIf="compte" class="mt-4">
-              <!-- Code Client Input -->
+
+              <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
+              <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
+              <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
+
+              <!-- Solde -->
               <div class="mb-3">
-                <label for="codeClientUpdate" class="form-label">Code Client</label>
-                <input type="number" class="form-control" id="codeClientUpdate" [(ngModel)]="compte.codeClient" name="codeClient" required />
-              </div>
-              <!-- Code Employee Input -->
-              <div class="mb-3">
-                <label for="codeEmployeUpdate" class="form-label">Code Employee</label>
-                <input type="number" class="form-control" id="codeEmployeUpdate" [(ngModel)]="compte.codeEmploye" name="codeEmploye" required />
+                <label for="SoldeUpdate" class="form-label">Solde</label>
+                <input type="number" class="form-control" id="SoldeUpdate" [(ngModel)]="compte.solde" name="codeEmploye" required />
               </div>
               <!-- Taux Input -->
-              <div class="mb-3" *ngIf="newCompte.typeCompte == 'CE' ">
+              <div class="mb-3" *ngIf="compte.typeCompte == 'CE' " >
                 <label for="tauxUpdate" class="form-label">Taux</label>
                 <input type="number" class="form-control" id="tauxUpdate" [(ngModel)]="compte.taux" name="taux" required />
               </div>
-              <div class="mb-3" *ngIf="newCompte.typeCompte == 'CC' ">
-                <label for="decouvertUpdate" class="form-label">Decouvert</label>
+              <div class="mb-3" *ngIf="compte.typeCompte == 'CC' ">
+                <label for="decouvertUpdate" class="form-label">Découvert</label>
                 <input type="number" class="form-control" id="decouvertUpdate" [(ngModel)]="compte.decouvert" name="taux" required />
               </div>
               <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Update Compte</button>

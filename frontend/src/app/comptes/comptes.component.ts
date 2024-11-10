@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ComptesService } from '../comptes.service';
 import { Router } from '@angular/router';
+import {ClientService} from '../client.service';
+import {ClientsComponent} from '../clients/clients.component';
+import {EmployeesService} from '../employees.service';
 
 @Component({
   selector: 'app-comptes',
@@ -21,11 +24,29 @@ export class ComptesComponent implements OnInit {
     "codeEmploye": null
     };
 
-  constructor(private comptesService: ComptesService, private router: Router) { }
+  clients : any ;
+  employees : any ;
+
+  constructor(private comptesService: ComptesService, private clientService: ClientService, private employeesService: EmployeesService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllComptes();  // Fetch all comptes on component load
+    this.fetchClients();
+    this.fetchEmployees();
   }
+
+  fetchClients(){
+    this.clientService.getClients().subscribe({
+      next: (res) => this.clients = res
+    });
+  }
+
+  fetchEmployees(){
+    this.employeesService.listEmployes().subscribe({
+      next: (res) => this.employees = res
+    });
+  }
+
 
   // Fetch all comptes from the service
   getAllComptes() {
