@@ -34,6 +34,16 @@ public class EmployeMtierImpl implements EmployeMetier {
             employe.setEmployeSuperieur(employeSuperieur);
         }
 
+        List<Groupe> groupes = new ArrayList<>();
+        if (employeRequest.getCodesGroupes() != null) {
+            for (Long codeGroupe : employeRequest.getCodesGroupes()) {
+                Groupe groupe = groupeRepository.findById(codeGroupe)
+                        .orElseThrow(() -> new RuntimeException("Groupe non trouvé"));
+                groupes.add(groupe);
+            }
+            employe.setGroupes(groupes);
+        }
+
         Employe savedEmploye = employeRepository.save(employe);
         return convertToDTO(savedEmploye);
     }

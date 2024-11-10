@@ -18,8 +18,8 @@ public class GroupeRestService {
     private GroupeMetier groupeMetier;
 
     @PostMapping
-    public GroupeResponse saveGroupe(@RequestBody GroupeRequest groupe) {
-        return groupeMetier.saveGroupe(groupe);
+    public GroupeResponse saveGroupe(@RequestBody GroupeRequest groupeRequest) {
+        return groupeMetier.saveGroupe(groupeRequest);
     }
 
     @GetMapping
@@ -28,17 +28,19 @@ public class GroupeRestService {
     }
 
     @GetMapping("/{id}")
-    public GroupeResponse getGroupe(@PathVariable Long id) {
-        return groupeMetier.getGroupe(id);
+    public GroupeResponse getGroupe(@PathVariable Long codeGroupe) {
+        return groupeMetier.getGroupe(codeGroupe);
     }
 
     @PutMapping("/{codeGroupe}")
-    public GroupeResponse updateGroupe(@PathVariable Long codeGroupe, @RequestBody GroupeRequest groupe) {
-        return groupeMetier.updateGroupe(codeGroupe, groupe);
+    public GroupeResponse updateGroupe(
+            @PathVariable Long codeGroupe,
+            @RequestBody GroupeRequest groupeRequest) {
+        return groupeMetier.updateGroupe(codeGroupe, groupeRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGroupe(@PathVariable Long id) {
-        groupeMetier.deleteGroupe(id);
+    public void deleteGroupe(@PathVariable Long codeGroupe) {
+        groupeMetier.deleteGroupe(codeGroupe);
     }
 }

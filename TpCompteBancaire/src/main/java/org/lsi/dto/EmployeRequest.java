@@ -9,5 +9,5 @@ public class EmployeRequest {
     @NotBlank(message = "Le nom de l'employé ne peut pas être vide")
     private String nomEmploye;
     private Long codeEmployeSuperieur;
-    private List<Long> codesGroupes;
+    private List<Long> codesGroupes;  // Déjà au bon format
 }

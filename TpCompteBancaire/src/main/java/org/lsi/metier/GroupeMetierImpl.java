@@ -24,18 +24,16 @@ public class GroupeMetierImpl implements GroupeMetier {
     @Autowired
     private EmployeRepository employeRepository;
 
+    @Override
     public GroupeResponse saveGroupe(GroupeRequest groupeRequest) {
         Groupe groupe = new Groupe();
         groupe.setNomGroupe(groupeRequest.getNomGroupe());
 
-        // Gérer les employés par leurs IDs
         if (groupeRequest.getCodesEmployes() != null && !groupeRequest.getCodesEmployes().isEmpty()) {
-            List<Employe> employes = new ArrayList<>();
-            for (Long codeEmploye : groupeRequest.getCodesEmployes()) {
-                Employe employe = employeRepository.findById(codeEmploye)
-                        .orElseThrow(() -> new RuntimeException("Employé avec ID " + codeEmploye + " non trouvé"));
-                employes.add(employe);
-            }
+            List<Employe> employes = groupeRequest.getCodesEmployes().stream()
+                    .map(codeEmploye -> employeRepository.findById(codeEmploye)
+                            .orElseThrow(() -> new RuntimeException("Employé avec ID " + codeEmploye + " non trouvé")))
+                    .collect(Collectors.toList());
             groupe.setEmployes(employes);
         }
 
@@ -46,33 +44,41 @@ public class GroupeMetierImpl implements GroupeMetier {
     @Override
     public List<GroupeResponse> listGroupes() {
         List<Groupe> groupes = groupeRepository.findAll();
-        List<GroupeResponse> groupeResponses = new ArrayList<>();
-        for (Groupe groupe : groupes) {
-            groupeResponses.add(convertToDTO(groupe));
-        }
-        return groupeResponses;
+        return groupes.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public GroupeResponse getGroupe(Long id) {
-        return convertToDTO(groupeRepository.findById(id).orElse(null));
+        return groupeRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
     @Override
-    public GroupeResponse updateGroupe(Long id, GroupeRequest newGroupeData) {
-        Groupe updatedGroupe = groupeRepository.findById(id).map(groupe -> {
-            // Update the nomGroupe field with the new value
-            groupe.setNomGroupe(newGroupeData.getNomGroupe());
-            // Save the updated group
-            return groupeRepository.save(groupe);
-        }).orElse(null); // Return null if the group with the specified ID is not found
-        return convertToDTO(updatedGroupe) ;
+    public GroupeResponse updateGroupe(Long codeGroupe, GroupeRequest groupeData) {
+        return groupeRepository.findById(codeGroupe)
+                .map(groupe -> {
+                    groupe.setNomGroupe(groupeData.getNomGroupe());
+
+                    if (groupeData.getCodesEmployes() != null) {
+                        List<Employe> employes = groupeData.getCodesEmployes().stream()
+                                .map(codeEmploye -> employeRepository.findById(codeEmploye)
+                                        .orElseThrow(() -> new RuntimeException("Employé avec ID " + codeEmploye + " non trouvé")))
+                                .collect(Collectors.toList());
+                        groupe.setEmployes(employes);
+                    }
+
+                    return convertToDTO(groupeRepository.save(groupe));
+                })
+                .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID: " + codeGroupe));
     }
 
 
     @Override
-    public void deleteGroupe(Long id) {
-        groupeRepository.deleteById(id);
+    public void deleteGroupe(Long codeGroupe) {
+        groupeRepository.deleteById(codeGroupe);
     }
 
 
@@ -81,17 +87,20 @@ public class GroupeMetierImpl implements GroupeMetier {
         dto.setCodeGroupe(groupe.getCodeGroupe());
         dto.setNomGroupe(groupe.getNomGroupe());
 
-        if (groupe.getEmployes() != null) {
+        // Vérifiez et convertissez les employés associés, si présents
+        if (groupe.getEmployes() != null && !groupe.getEmployes().isEmpty()) {
             List<EmployeResponse> employeResponses = groupe.getEmployes().stream()
                     .map(employe -> {
                         EmployeResponse empDTO = new EmployeResponse();
                         empDTO.setCodeEmploye(employe.getCodeEmploye());
                         empDTO.setNomEmploye(employe.getNomEmploye());
-                        // Setter d'autres champs si nécessaire
+                        // Ajoutez d'autres champs si nécessaire
                         return empDTO;
                     })
                     .collect(Collectors.toList());
             dto.setEmployes(employeResponses);
+        } else {
+            dto.setEmployes(new ArrayList<>()); // Si pas d'employés, initialisez avec une liste vide
         }
         return dto;
     }

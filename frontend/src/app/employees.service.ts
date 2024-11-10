@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-// Définition des interfaces pour les types EmployeRequest et EmployeResponse
 export interface EmployeRequest {
   nomEmploye: string;
   codeEmployeSuperieur?: number;
@@ -22,54 +21,53 @@ export interface EmployeResponse {
   providedIn: 'root'
 })
 export class EmployeesService {
-  private url = "http://localhost:8081/employes";
+  private apiUrl = 'http://localhost:8081/employes'; // Update this URL to match your Spring Boot server
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  // Ajoute un nouvel employé
-  addEmployee(employee: EmployeRequest): Observable<EmployeResponse> {
-    return this.httpClient.post<EmployeResponse>(this.url, employee, this.httpOptions)
+  // Create a new employee
+  saveEmploye(employeRequest: EmployeRequest): Observable<EmployeResponse> {
+    return this.http.post<EmployeResponse>(this.apiUrl, employeRequest, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
-  // Récupère la liste des employés
-  getEmployees(): Observable<EmployeResponse[]> {
-    return this.httpClient.get<EmployeResponse[]>(this.url)
+  // Update an existing employee
+  updateEmploye(codeEmploye: number, employeRequest: EmployeRequest): Observable<EmployeResponse> {
+    return this.http.put<EmployeResponse>(`${this.apiUrl}/${codeEmploye}`, employeRequest, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
-  // Récupère un employé par son code
-  getEmployee(codeEmploye: number): Observable<EmployeResponse> {
-    return this.httpClient.get<EmployeResponse>(`${this.url}/${codeEmploye}`)
+  // Get all employees
+  listEmployes(): Observable<EmployeResponse[]> {
+    return this.http.get<EmployeResponse[]>(this.apiUrl)
       .pipe(catchError(this.handleError));
   }
 
-  // Supprime un employé par son code
+  // Get a specific employee by code
+  getEmploye(codeEmploye: number): Observable<EmployeResponse> {
+    return this.http.get<EmployeResponse>(`${this.apiUrl}/${codeEmploye}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Delete an employee
   deleteEmploye(codeEmploye: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.url}/${codeEmploye}`)
+    return this.http.delete<void>(`${this.apiUrl}/${codeEmploye}`)
       .pipe(catchError(this.handleError));
   }
 
-  // Met à jour un employé
-  updateEmploye(codeEmploye: number, data: EmployeRequest): Observable<EmployeResponse> {
-    return this.httpClient.put<EmployeResponse>(`${this.url}/${codeEmploye}`, data, this.httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
-  // Gestion des erreurs
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Une erreur inconnue est survenue';
+    let errorMessage = 'An unknown error occurred';
     if (error.error instanceof ErrorEvent) {
-      // Erreur côté client
-      errorMessage = `Erreur côté client : ${error.error.message}`;
+      // Client-side error
+      errorMessage = `Client-side error: ${error.error.message}`;
     } else {
-      // Erreur côté serveur
-      errorMessage = `Erreur du serveur : Code ${error.status}, Message : ${error.message}`;
+      // Server-side error
+      errorMessage = `Server-side error: Code ${error.status}, Message: ${error.message}`;
     }
     console.error(errorMessage);
-    return throwError(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }
