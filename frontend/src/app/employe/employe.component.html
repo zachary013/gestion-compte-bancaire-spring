@@ -24,8 +24,11 @@
         <tr *ngFor="let employee of employees">
           <td>{{ employee.codeEmploye }}</td>
           <td>{{ employee.nomEmploye }}</td>
-          <td>{{ employee.supEmployes?.length ? employee.supEmployes[0].codeEmploye : '' }}</td>
+          <td>{{ employee.codeEmployeSuperieur || '-' }}</td>
           <td class="d-flex gap-2">
+            <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#edit-employee">
+              Modifier
+            </button>
             <button class="btn btn-warning" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#operations">
               Voir Opérations
             </button>
@@ -38,6 +41,48 @@
       </table>
     </div>
   </div>
+
+  <!-- Modal for Editing Employee
+  <div class="modal fade" id="edit-employee" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier Employé</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateEmployee()">
+            <div class="mb-3">
+              <label for="editNomEmploye" class="form-label">Nom Employé</label>
+              <input type="text" class="form-control" id="editNomEmploye" [(ngModel)]="editingEmployee.nomEmploye" name="nomEmploye" required>
+            </div>
+            <div class="mb-3">
+              <label for="editCodeSupEmployee" class="form-label">Supérieur</label>
+              <select class="form-select" id="editCodeSupEmployee" [(ngModel)]="editingEmployee.codeEmployeSuperieur" name="codeEmployeSuperieur">
+                <option [ngValue]="undefined">Aucun supérieur</option>
+                <option *ngFor="let emp of employees" [ngValue]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Groupes</label>
+              <div *ngFor="let group of groups" class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       [id]="'group' + group.codeGroupe"
+                       [value]="group.codeGroupe"
+                       [checked]="editingEmployee.codesGroupes?.includes(group.codeGroupe)"
+                       (change)="onGroupSelectionChange($event, group.codeGroupe)">
+                <label class="form-check-label" [for]="'group' + group.codeGroupe">
+                  {{ group.nomGroupe }}
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  -->
 
   <!-- Modal for Employee Operations -->
   <div class="modal fade" id="operations" tabindex="-1">
@@ -90,10 +135,18 @@
               <input type="text" class="form-control" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">Supérieur</label>
-              <select class="form-select" [(ngModel)]="codeSupEmployee" name="codeSupEmployee">
+              <label class="form-label">Nom Employé Supérieur</label>
+              <select class="form-select" [(ngModel)]="newEmployee.codeEmployeSuperieur" name="codeEmployeSuperieur">
                 <option value="" disabled selected>Sélectionner un supérieur</option>
-                <option *ngFor="let emp of employees" [value]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
+                <option *ngFor="let emp of employees" [ngValue]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nom Groupe</label>
+              <select class="form-select">
+                <option>Ahmed</option>
+                <option>Dina BA</option>
+                <option>Nour</option>
               </select>
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>

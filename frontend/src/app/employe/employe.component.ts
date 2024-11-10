@@ -16,9 +16,11 @@ export class EmployeComponent implements OnInit {
   newEmployee: any = {
     "codeEmploye": null,
     "nomEmploye": '',
-    "supEmployes": [],
+    "codeEmployeSuperieur": null,
     "operations": []
   };
+  editingEmployeeId: number | null = null;
+  groups: any[] = [];
 
   constructor(private employeesService: EmployeesService, private router: Router) {}
 
@@ -27,27 +29,17 @@ export class EmployeComponent implements OnInit {
   }
 
   addEmployee() {
-    if (!this.newEmployee.supEmployes) {
-      this.newEmployee.supEmployes = [];
-    }
-
-    this.employeesService.getEmployee(this.codeSupEmployee).subscribe((res: any) => {
-      if (res) {
-        this.newEmployee.supEmployes.push(res);
-
-        this.employeesService.addEmployee(this.newEmployee).subscribe(
-          (res: any) => {
-            this.getAllEmployees();
-            this.newEmployee = { "nomEmploye": '', "supEmployes": [] };
-            this.showAlert = true;
-            setTimeout(() => { this.showAlert = false; }, 3000);
-          },
-          (error: any) => {
-            console.error("Error adding employee:", error);
-          }
-        );
+    this.employeesService.addEmployee(this.newEmployee).subscribe(
+      (res: any) => {
+        this.getAllEmployees();
+        this.newEmployee = { "nomEmploye": '', "codeEmployeSuperieur": null };
+        this.showAlert = true;
+        setTimeout(() => { this.showAlert = false; }, 3000);
+      },
+      (error: any) => {
+        console.error("Error adding employee:", error);
       }
-    });
+    );
   }
 
   getOneEmployee(codeEmploye: number) {
