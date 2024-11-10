@@ -9,9 +9,8 @@ import java.util.List;
 
 @Data
 public class GroupeRequest {
-
-    @NotNull(message = "Le nom de l'employé ne peut pas être null")
-    @NotBlank(message = "Le nom de l'employé ne peut pas être vide")
-    String nomGroupe ;
-    List<Employe> employes ;
+    @NotNull(message = "Le nom du groupe ne peut pas être null")
+    @NotBlank(message = "Le nom du groupe ne peut pas être vide")
+    private String nomGroupe;
+    private List<Long> codesEmployes; // Changer pour utiliser juste les IDs
 }

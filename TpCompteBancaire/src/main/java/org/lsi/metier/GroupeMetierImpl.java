@@ -1,5 +1,6 @@
 package org.lsi.metier;
 
+import org.lsi.dao.EmployeRepository;
 import org.lsi.dao.GroupeRepository;
 import org.lsi.dto.EmployeResponse;
 import org.lsi.dto.GroupeRequest;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,11 +21,23 @@ public class GroupeMetierImpl implements GroupeMetier {
 
     @Autowired
     private GroupeRepository groupeRepository;
+    @Autowired
+    private EmployeRepository employeRepository;
 
-    @Override
     public GroupeResponse saveGroupe(GroupeRequest groupeRequest) {
         Groupe groupe = new Groupe();
         groupe.setNomGroupe(groupeRequest.getNomGroupe());
+
+        // Gérer les employés par leurs IDs
+        if (groupeRequest.getCodesEmployes() != null && !groupeRequest.getCodesEmployes().isEmpty()) {
+            List<Employe> employes = new ArrayList<>();
+            for (Long codeEmploye : groupeRequest.getCodesEmployes()) {
+                Employe employe = employeRepository.findById(codeEmploye)
+                        .orElseThrow(() -> new RuntimeException("Employé avec ID " + codeEmploye + " non trouvé"));
+                employes.add(employe);
+            }
+            groupe.setEmployes(employes);
+        }
 
         Groupe savedGroupe = groupeRepository.save(groupe);
         return convertToDTO(savedGroupe);
@@ -61,12 +75,23 @@ public class GroupeMetierImpl implements GroupeMetier {
         groupeRepository.deleteById(id);
     }
 
+
     private GroupeResponse convertToDTO(Groupe groupe) {
         GroupeResponse dto = new GroupeResponse();
         dto.setCodeGroupe(groupe.getCodeGroupe());
         dto.setNomGroupe(groupe.getNomGroupe());
+
         if (groupe.getEmployes() != null) {
-            dto.setEmployes((List<Employe>) groupe.getEmployes());
+            List<EmployeResponse> employeResponses = groupe.getEmployes().stream()
+                    .map(employe -> {
+                        EmployeResponse empDTO = new EmployeResponse();
+                        empDTO.setCodeEmploye(employe.getCodeEmploye());
+                        empDTO.setNomEmploye(employe.getNomEmploye());
+                        // Setter d'autres champs si nécessaire
+                        return empDTO;
+                    })
+                    .collect(Collectors.toList());
+            dto.setEmployes(employeResponses);
         }
         return dto;
     }

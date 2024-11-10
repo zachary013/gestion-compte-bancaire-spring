@@ -28,9 +28,6 @@ public class Employe implements Serializable {
     private Collection<Employe> employesSubordonnes;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "EMP_GR",
-            joinColumns = @JoinColumn(name = "CODE_EMP"),
-            inverseJoinColumns = @JoinColumn(name = "CODE_GR"))
     private Collection<Groupe> groupes;
 
     @OneToMany(mappedBy = "employe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

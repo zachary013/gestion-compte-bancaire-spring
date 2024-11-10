@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class GroupeResponse {
-    Long codeGroupe ;
-    String nomGroupe ;
-    List<Employe> employes ;
+    private Long codeGroupe;
+    private String nomGroupe;
+    private List<EmployeResponse> employes; // Utiliser EmployeResponse au lieu de Employe
 }
