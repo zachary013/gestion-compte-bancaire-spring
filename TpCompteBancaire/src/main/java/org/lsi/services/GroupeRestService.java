@@ -1,5 +1,7 @@
 package org.lsi.services;
 
+import org.lsi.dto.GroupeRequest;
+import org.lsi.dto.GroupeResponse;
 import org.lsi.entities.Groupe;
 import org.lsi.metier.GroupeMetier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +18,22 @@ public class GroupeRestService {
     private GroupeMetier groupeMetier;
 
     @PostMapping
-    public Groupe saveGroupe(@RequestBody Groupe groupe) {
+    public GroupeResponse saveGroupe(@RequestBody GroupeRequest groupe) {
         return groupeMetier.saveGroupe(groupe);
     }
 
     @GetMapping
-    public List<Groupe> listGroupes() {
+    public List<GroupeResponse> listGroupes() {
         return groupeMetier.listGroupes();
     }
 
     @GetMapping("/{id}")
-    public Groupe getGroupe(@PathVariable Long id) {
+    public GroupeResponse getGroupe(@PathVariable Long id) {
         return groupeMetier.getGroupe(id);
     }
 
     @PutMapping("/{codeGroupe}")
-    public Groupe updateGroupe(@PathVariable Long codeGroupe, @RequestBody Groupe groupe) {
+    public GroupeResponse updateGroupe(@PathVariable Long codeGroupe, @RequestBody GroupeRequest groupe) {
         return groupeMetier.updateGroupe(codeGroupe, groupe);
     }
 

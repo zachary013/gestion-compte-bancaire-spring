@@ -2,7 +2,13 @@
   <!-- Card for Comptes List -->
   <div class="card">
     <div class="card-header">
-      <h5 class="mb-0">Comptes List</h5>
+      <h5 class="mb-0">
+        Comptes List
+        <!-- Button to trigger Add Compte Modal -->
+        <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addCompteModal">
+          Add Compte
+        </button>
+      </h5>
     </div>
     <div class="card-body">
       <!-- Comptes Table -->
@@ -25,17 +31,17 @@
         <tr *ngFor="let compte of comptes">
           <td>{{ compte.typeCompte }}</td>
           <td>{{ compte.codeCompte }}</td>
-          <td>{{ compte.dateCreation }}</td>
+          <td>{{ compte.dateCreation | date }}</td>
           <td>{{ compte.solde }}</td>
           <td>{{ compte.decouvert }}</td>
           <td>{{ compte.taux }}%</td>
           <td>{{ compte.codeClient }}</td>
           <td>{{ compte.codeEmploye }}</td>
           <td>
+            <!-- View Details Button -->
             <button class="btn btn-info" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#exampleModal">
               View Details
             </button>
-
           </td>
         </tr>
         </tbody>
@@ -43,7 +49,48 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal for Adding Compte -->
+  <div class="modal fade" id="addCompteModal" tabindex="-1" aria-labelledby="addCompteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addCompteModalLabel">Add New Compte</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="addCompte()">
+            <!-- Type Compte Dropdown -->
+            <div class="mb-3">
+              <label for="typeCompte" class="form-label">Type Compte</label>
+              <select class="form-select" id="typeCompte" [(ngModel)]="newCompte.typeCompte" name="typeCompte" required>
+                <option value="CE">Compte Epagne (CE)</option>
+                <option value="CC">Compte Courant (CC)</option>
+                <!-- Add more types as needed -->
+              </select>
+            </div>
+            <!-- Code Client Input -->
+            <div class="mb-3">
+              <label for="codeClient" class="form-label">Code Client</label>
+              <input type="number" class="form-control" id="codeClient" [(ngModel)]="newCompte.codeClient" name="codeClient" required />
+            </div>
+            <!-- Code Employee Input -->
+            <div class="mb-3">
+              <label for="codeEmploye" class="form-label">Code Employee</label>
+              <input type="number" class="form-control" id="codeEmploye" [(ngModel)]="newCompte.codeEmploye" name="codeEmploye" required />
+            </div>
+            <!-- Taux Input -->
+            <div class="mb-3">
+              <label for="taux" class="form-label">Taux</label>
+              <input type="number" class="form-control" id="taux" [(ngModel)]="newCompte.taux" name="taux" required />
+            </div>
+            <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Add Compte</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Viewing Compte Details (already existing) -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -54,14 +101,14 @@
         <div class="modal-body">
           <!-- Single Compte Details -->
           <div *ngIf="compte" class="mt-4">
-                <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
-                <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
-                <p><strong>Date Creation:</strong> {{ compte.dateCreation }}</p>
-                <p><strong>Solde:</strong> {{ compte.solde }}</p>
-                <p><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
-                <p><strong>Taux:</strong> {{ compte.taux }}%</p>
-                <p><strong>Code Client:</strong> {{ compte.codeClient }}</p>
-                <p><strong>Code Employee:</strong> {{ compte.codeEmploye }}</p>
+            <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
+            <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
+            <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
+            <p><strong>Solde:</strong> {{ compte.solde }}</p>
+            <p><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
+            <p><strong>Taux:</strong> {{ compte.taux }}%</p>
+            <p><strong>Code Client:</strong> {{ compte.codeClient }}</p>
+            <p><strong>Code Employee:</strong> {{ compte.codeEmploye }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -70,6 +117,5 @@
       </div>
     </div>
   </div>
-
 
 </div>

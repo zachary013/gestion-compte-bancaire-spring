@@ -1,11 +1,13 @@
 package org.lsi.metier;
+import org.lsi.dto.GroupeRequest;
+import org.lsi.dto.GroupeResponse;
 import org.lsi.entities.Groupe;
 import java.util.List;
 
 public interface GroupeMetier {
-    Groupe saveGroupe(Groupe groupe);
-    List<Groupe> listGroupes();
-    Groupe getGroupe(Long id);
-    Groupe updateGroupe(Long id, Groupe newGroupeData);
+    GroupeResponse saveGroupe(GroupeRequest groupe);
+    List<GroupeResponse> listGroupes();
+    GroupeResponse getGroupe(Long id);
+    GroupeResponse updateGroupe(Long id, GroupeRequest newGroupeData);
     void deleteGroupe(Long id);
 }
