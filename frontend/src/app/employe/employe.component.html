@@ -1,57 +1,37 @@
 <div class="container pb-2">
-  <div *ngIf="showAlert" class="alert alert-danger" role="alert">
-    Employee Deleted Successfully
+  <div *ngIf="showAlert" class="alert alert-success" role="alert">
+    Action réussie
   </div>
-
-
-
-  <!-- Card for Comptes List -->
+  <!-- Card for Employee List -->
   <div class="card">
     <div class="card-header d-flex justify-content-between">
-      <h5 class="mb-0">Comptes List</h5>
-      <div>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-employee">
-          Create
-        </button>
-
-      </div>
+      <h5 class="mb-0">Liste des employés</h5>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-employee">
+        Ajouter Employé
+      </button>
     </div>
     <div class="card-body">
-      <!-- employee Table -->
       <table class="table table-hover">
         <thead>
         <tr>
-
-
-          <th scope="col">Code Employe</th>
-          <th scope="col">Nom Employe</th>
-          <th scope="col">Code Emp Sup</th>
+          <th scope="col">Code Employé</th>
+          <th scope="col">Nom Employé</th>
+          <th scope="col">Code Supérieur</th>
           <th scope="col">Actions</th>
-
-
         </tr>
         </thead>
         <tbody>
-        <!-- Loop through comptes and display each one -->
         <tr *ngFor="let employee of employees">
           <td>{{ employee.codeEmploye }}</td>
           <td>{{ employee.nomEmploye }}</td>
-          <td>{{ employee.supEmployes }}</td>
-
+          <td>{{ employee.supEmployes?.length ? employee.supEmployes[0].codeEmploye : '' }}</td>
           <td class="d-flex gap-2">
-            <button class="btn btn-primary" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              Comptes
-            </button>
             <button class="btn btn-warning" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#operations">
-              Operations
+              Voir Opérations
             </button>
-            <button class="btn btn-success" (click)="getOneEmployee(employee.codeEmploye)" data-bs-toggle="modal" data-bs-target="#operations">
-              Update
+            <button class="btn btn-danger" (click)="deleteEmployee(employee.codeEmploye)">
+              Supprimer
             </button>
-            <button class="btn btn-danger" (click)="deleteEmployee(employee.codeEmploye)"  >
-              Delete
-            </button>
-
           </td>
         </tr>
         </tbody>
@@ -59,131 +39,67 @@
     </div>
   </div>
 
-  <!-- show employee detail  -->
-  <div class="modal fade modal-xl" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Modal for Employee Operations -->
+  <div class="modal fade" id="operations" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Comptes</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Opérations</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div *ngIf="employee" class="mt-4">
-            <table class="table table-hover" >
+          <div *ngIf="employee">
+            <table class="table">
               <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Code</th>
-                <th scope="col">Solde</th>
-                <th scope="col">Date Creation</th>
-                <th scope="col">Decouvert</th>
-                <th scope="col">Actions</th>
+                <th>#</th>
+                <th>Type</th>
+                <th>Numéro</th>
+                <th>Date</th>
+                <th>Montant</th>
               </tr>
               </thead>
-              <tbody *ngFor="let compte of employee.comptes; let i = index">
-              <tr>
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ compte.codeCompte }}</td>
-                <td>{{ compte.solde }}</td>
-                <td>{{ compte.dateCreation }}</td>
-                <td>{{ compte.decouvert }}</td>
-                <td>
-                  <button class="btn btn-primary"  >
-                    action
-                  </button>
-                </td>
+              <tbody>
+              <tr *ngFor="let operation of employee.operations; let i = index">
+                <th>{{ i + 1 }}</th>
+                <td>{{ operation.DTYPE }}</td>
+                <td>{{ operation.numeroOperation }}</td>
+                <td>{{ operation.dateOperation | date }}</td>
+                <td>{{ operation.montant }}</td>
               </tr>
               </tbody>
             </table>
-
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- operations -->
-  <div class="modal fade modal-xl" id="operations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Modal for Creating Employee -->
+  <div class="modal fade" id="create-employee" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="operationLabel">Operations</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div *ngIf="employee" class="mt-4">
-            <table class="table table-hover" >
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">DTYPE</th>
-                <th scope="col">numeroOperation</th>
-                <th scope="col">date Operation</th>
-                <th scope="col">montant</th>
-                <th scope="col">codeCpte</th>
-                <th scope="col">codeEmp</th>
-              </tr>
-              </thead>
-              <tbody *ngFor="let operation of employee.operations; let i = index">
-                <tr>
-                  <th scope="row">{{ i + 1 }}</th>
-                  <td>{{ operation.DTYPE }}</td>
-                  <td>{{ operation.numeroOperation }}</td>
-                  <td>{{ operation.dateOperation }}</td>
-                  <td>{{ operation.montant }}</td>
-                  <td>{{ operation.codeCpte }}</td>
-                  <td>{{ operation.codeEmp }}</td>
-
-                </tr>
-              </tbody>
-            </table>
-
-           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- create -->
-  <div class="modal fade modal-xl" id="create-employee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="create-employeeLabel">Create Employee</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Créer Employé</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <form (ngSubmit)="addEmployee()">
             <div class="mb-3">
-              <label for="amountInput" class="form-label">Nom Employee</label>
-              <input type="text" class="form-control" id="amountInput" placeholder="Entrée le nom de l'employée" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
+              <label class="form-label">Nom Employé</label>
+              <input type="text" class="form-control" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
             </div>
             <div class="mb-3">
-              <label for="supEmployes" class="form-label">Supervising Employee</label>
-              <select class="form-select" id="supEmployes" [(ngModel)]="codeSupEmployee" name="subEmployes" required>
-                <option value="" disabled selected>Select Supervising Employee</option>
-                <option *ngFor="let emp of employees" [value]="emp.codeEmploye">
-                  {{ emp.nomEmploye }}
-                </option>
+              <label class="form-label">Supérieur</label>
+              <select class="form-select" [(ngModel)]="codeSupEmployee" name="codeSupEmployee">
+                <option value="" disabled selected>Sélectionner un supérieur</option>
+                <option *ngFor="let emp of employees" [value]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
               </select>
-
             </div>
-
-
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-
-
 </div>

@@ -1,10 +1,12 @@
 package org.lsi.services;
 
-import java.util.List;
-import org.lsi.entities.Employe;
+import org.lsi.dto.EmployeRequest;
+import org.lsi.dto.EmployeResponse;
 import org.lsi.metier.EmployeMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/employes")
@@ -15,30 +17,29 @@ public class EmployeRestService {
     private EmployeMetier employeMetier;
 
     @PostMapping
-    public Employe saveEmploye(@RequestBody Employe e) {
-        return employeMetier.saveEmploye(e);
+    public EmployeResponse saveEmploye(@RequestBody EmployeRequest employeRequest) {
+        return employeMetier.saveEmploye(employeRequest);
+    }
+
+    @PutMapping("/{codeEmploye}")
+    public EmployeResponse updateEmploye(
+            @PathVariable Long codeEmploye,
+            @RequestBody EmployeRequest employeRequest) {
+        return employeMetier.updateEmploye(codeEmploye, employeRequest);
     }
 
     @GetMapping
-    public List<Employe> listEmployes() {
+    public List<EmployeResponse> listEmployes() {
         return employeMetier.listEmployes();
     }
 
     @GetMapping("/{codeEmploye}")
-    public Employe getOneEmploye(@PathVariable Long codeEmploye){
+    public EmployeResponse getEmploye(@PathVariable Long codeEmploye) {
         return employeMetier.getEmploye(codeEmploye);
     }
 
     @DeleteMapping("/{codeEmploye}")
-    public Long deleteOneEmploye(@PathVariable Long codeEmploye) {
-        return employeMetier.deleteEmploye(codeEmploye);
-    }
-
-    @PutMapping("/{codeEmploye}/groupes/{codeGroupe}")
-    public void affecterEmployeGroupe(
-            @PathVariable Long codeEmploye,
-            @PathVariable Long codeGroupe
-    ) {
-        employeMetier.affecterEmployeGroupe(codeEmploye, codeGroupe);
+    public void deleteEmploye(@PathVariable Long codeEmploye) {
+        employeMetier.deleteEmploye(codeEmploye);
     }
 }
