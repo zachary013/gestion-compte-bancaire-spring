@@ -11,7 +11,15 @@ export class ComptesComponent implements OnInit {
 
   comptes: any;
   compte: any;
-  newCompte: any = {}; // Initialize an empty object for the new compte
+  newCompte: any = {
+    "codeCompte": "",
+    "dateCreation": "",
+    "solde": 0,
+    "operations": null,
+    "decouvert": null,
+    "codeClient": null,
+    "codeEmploye": null
+    };
 
   constructor(private comptesService: ComptesService, private router: Router) { }
 
@@ -47,9 +55,16 @@ export class ComptesComponent implements OnInit {
         (res) => {
           console.log('Compte added:', res);
           this.getAllComptes(); // Refresh the list after adding
-          // Close the modal
-          const addCompteModal = document.getElementById('addCompteModal') as any;
-          addCompteModal?.modal('hide');
+          this.newCompte = {
+            "codeCompte": "",
+            "dateCreation": "",
+            "solde": 0,
+            "operations": null,
+            "decouvert": null,
+            "codeClient": null,
+            "codeEmploye": null
+          };
+
         },
         (error) => {
           console.error('Error adding compte:', error);
@@ -57,4 +72,29 @@ export class ComptesComponent implements OnInit {
       );
     }
   }
+
+  updateCompte() {
+    this.comptesService.update(this.compte.codeCompte, this.compte).subscribe((res) => {
+      this.getAllComptes();
+      this.newCompte = {
+        "codeCompte": "",
+        "dateCreation": "",
+        "solde": 0,
+        "operations": null,
+        "decouvert": null,
+        "codeClient": null,
+        "codeEmploye": null
+      };
+
+    });
+  }
+
+  deleteCompte(codeCompte: string){
+    this.comptesService.delete(codeCompte).subscribe((res: any) => {
+      this.getAllComptes();
+    });
+  }
+
+
+
 }

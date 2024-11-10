@@ -37,11 +37,20 @@
           <td>{{ compte.taux }}%</td>
           <td>{{ compte.codeClient }}</td>
           <td>{{ compte.codeEmploye }}</td>
-          <td>
-            <!-- View Details Button -->
-            <button class="btn btn-info" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              View Details
-            </button>
+          <td class="">
+            <div class="d-flex gap-2 ">
+              <!-- View Details Button -->
+              <button class="btn btn-info btn-sm" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Details
+              </button>
+              <button class="btn btn-warning btn-sm" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#update-compte">
+                Update
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="deleteCompte(compte.codeCompte)" >
+                Delete
+              </button>
+            </div>
+
           </td>
         </tr>
         </tbody>
@@ -79,9 +88,13 @@
               <input type="number" class="form-control" id="codeEmploye" [(ngModel)]="newCompte.codeEmploye" name="codeEmploye" required />
             </div>
             <!-- Taux Input -->
-            <div class="mb-3">
+            <div class="mb-3" *ngIf="newCompte.typeCompte == 'CE' ">
               <label for="taux" class="form-label">Taux</label>
               <input type="number" class="form-control" id="taux" [(ngModel)]="newCompte.taux" name="taux" required />
+            </div>
+            <div class="mb-3" *ngIf="newCompte.typeCompte == 'CC' ">
+              <label for="decouvert" class="form-label">Decouvert</label>
+              <input type="number" class="form-control" id="decouvert" [(ngModel)]="newCompte.decouvert" name="taux" required />
             </div>
             <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Add Compte</button>
           </form>
@@ -105,15 +118,60 @@
             <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
             <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
             <p><strong>Solde:</strong> {{ compte.solde }}</p>
-            <p><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
-            <p><strong>Taux:</strong> {{ compte.taux }}%</p>
-            <p><strong>Code Client:</strong> {{ compte.codeClient }}</p>
-            <p><strong>Code Employee:</strong> {{ compte.codeEmploye }}</p>
+            <p *ngIf="compte.typeCompte == 'CC'"><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
+            <p *ngIf="compte.typeCompte == 'CE'"><strong>Taux:</strong> {{ compte.taux }}%</p>
+            <p><strong>Code Client:</strong> {{ compte.client.codeClient }}</p>
+            <p><strong>Code Employee:</strong> {{ compte.employe.codeEmploye }}</p>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal for Viewing Compte Update (already existing) -->
+  <div class="modal fade" id="update-compte" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="update-compteLabel">Compte Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form (ngSubmit)="updateCompte()">
+
+            <!-- Single Compte Details -->
+            <div *ngIf="compte" class="mt-4">
+              <!-- Code Client Input -->
+              <div class="mb-3">
+                <label for="codeClientUpdate" class="form-label">Code Client</label>
+                <input type="number" class="form-control" id="codeClientUpdate" [(ngModel)]="compte.codeClient" name="codeClient" required />
+              </div>
+              <!-- Code Employee Input -->
+              <div class="mb-3">
+                <label for="codeEmployeUpdate" class="form-label">Code Employee</label>
+                <input type="number" class="form-control" id="codeEmployeUpdate" [(ngModel)]="compte.codeEmploye" name="codeEmploye" required />
+              </div>
+              <!-- Taux Input -->
+              <div class="mb-3" *ngIf="newCompte.typeCompte == 'CE' ">
+                <label for="tauxUpdate" class="form-label">Taux</label>
+                <input type="number" class="form-control" id="tauxUpdate" [(ngModel)]="compte.taux" name="taux" required />
+              </div>
+              <div class="mb-3" *ngIf="newCompte.typeCompte == 'CC' ">
+                <label for="decouvertUpdate" class="form-label">Decouvert</label>
+                <input type="number" class="form-control" id="decouvertUpdate" [(ngModel)]="compte.decouvert" name="taux" required />
+              </div>
+              <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Update Compte</button>
+
+            </div>
+          </form>
+
+        </div>
+
       </div>
     </div>
   </div>

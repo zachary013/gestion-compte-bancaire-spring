@@ -62,7 +62,6 @@ export class GroupsComponent implements OnInit{
       this.groups = res;
       this.getAllGroup();  // Reload the employee list after deletion
     });
-
   }
 
 }

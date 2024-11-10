@@ -78,6 +78,15 @@ public class GroupeMetierImpl implements GroupeMetier {
 
     @Override
     public void deleteGroupe(Long codeGroupe) {
+        Groupe groupe = groupeRepository.findById(codeGroupe)
+                .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID: " + codeGroupe));
+
+        // Clear associations
+        if (groupe.getEmployes() != null) {
+            groupe.getEmployes().forEach(employe -> employe.getGroupes().remove(groupe));
+            groupe.getEmployes().clear();
+        }
+
         groupeRepository.deleteById(codeGroupe);
     }
 

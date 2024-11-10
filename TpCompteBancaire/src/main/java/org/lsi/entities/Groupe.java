@@ -16,7 +16,7 @@ public class Groupe implements Serializable {
     private Long codeGroupe;
     private String nomGroupe;
 
-    @ManyToMany(mappedBy = "groupes")
+    @ManyToMany(mappedBy = "groupes", cascade = CascadeType.ALL)
     private Collection<Employe> employes;
 
     public Groupe() {}
@@ -25,28 +25,4 @@ public class Groupe implements Serializable {
         this.nomGroupe = nomGroupe;
     }
 
-    // Getters and setters
-    public Long getCodeGroupe() {
-        return codeGroupe;
-    }
-
-    public void setCodeGroupe(Long codeGroupe) {
-        this.codeGroupe = codeGroupe;
-    }
-
-    public String getNomGroupe() {
-        return nomGroupe;
-    }
-
-    public void setNomGroupe(String nomGroupe) {
-        this.nomGroupe = nomGroupe;
-    }
-
-    public Collection<Employe> getEmployes() {
-        return employes;
-    }
-
-    public void setEmployes(Collection<Employe> employes) {
-        this.employes = employes;
-    }
 }

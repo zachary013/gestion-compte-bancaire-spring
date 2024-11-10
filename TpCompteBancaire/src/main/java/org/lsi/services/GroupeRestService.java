@@ -27,7 +27,7 @@ public class GroupeRestService {
         return groupeMetier.listGroupes();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{codeGroupe}")
     public GroupeResponse getGroupe(@PathVariable Long codeGroupe) {
         return groupeMetier.getGroupe(codeGroupe);
     }
@@ -39,7 +39,7 @@ public class GroupeRestService {
         return groupeMetier.updateGroupe(codeGroupe, groupeRequest);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{codeGroupe}")
     public void deleteGroupe(@PathVariable Long codeGroupe) {
         groupeMetier.deleteGroupe(codeGroupe);
     }

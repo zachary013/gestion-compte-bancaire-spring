@@ -1,5 +1,7 @@
 package org.lsi.services;
 
+import org.lsi.dto.CompteRequest;
+import org.lsi.dto.CompteResponse;
 import org.lsi.entities.Compte;
 import org.lsi.entities.CompteCourant;
 import org.lsi.entities.CompteEpargne;
@@ -23,53 +25,44 @@ public class CompteRestService {
     private CompteMetier compteMetier;
 
     @PostMapping
-    public ResponseEntity<Compte> saveCompte(@RequestBody Map<String, Object> requestData) {
-        String typeCompte = (String) requestData.get("typeCompte");
-        Long codeClient = Long.valueOf((Integer) requestData.get("codeClient"));
-        Long codeEmploye = Long.valueOf((Integer) requestData.get("codeEmploye"));
-
-        Compte cp;
-        if ("CE".equals(typeCompte)) {
-            cp = new CompteEpargne();
-            Double taux = ((Number) requestData.getOrDefault("taux", 0.0)).doubleValue();
-            ((CompteEpargne) cp).setTaux(taux);
-        } else if ("CC".equals(typeCompte)) {
-            cp = new CompteCourant();
-            Double decouvert = ((Number) requestData.getOrDefault("decouvert", 0.0)).doubleValue();
-            ((CompteCourant) cp).setDecouvert(decouvert);
-        } else {
-            throw new IllegalArgumentException("Type de compte invalide");
-        }
-
-        cp = compteMetier.saveCompte(cp, codeClient, codeEmploye);
-        return ResponseEntity.ok(cp);
+    public CompteResponse saveCompte(@RequestBody CompteRequest compteRequest) {
+        return compteMetier.saveCompte(compteRequest);
     }
 
+    @DeleteMapping("/{codeCompte}")
+    public void deleteCompte(@PathVariable String codeCompte) {
+        compteMetier.deleteCompte(codeCompte);
+    }
+
+    @PutMapping("/{codeCompte}")
+    public CompteResponse updateCompte(@RequestBody CompteRequest compteRequest, @PathVariable String codeCompte) {
+        return compteMetier.updateCompte((String) codeCompte, compteRequest);
+    }
 
 
 
     @GetMapping
-    public List<Compte> getAllCompte (){
+    public List<CompteResponse> getAllCompte (){
         return compteMetier.getAllCompte();
     }
 
     @GetMapping("/{code}")
-    public Compte getCompte (@PathVariable String code){
+    public CompteResponse getCompte (@PathVariable String code){
         return compteMetier.getCompte(code);
     }
 
     @PostMapping("/verser")
-    public Compte verser (@RequestParam String code,@RequestParam double montant, @RequestParam Long codeEmp){
+    public CompteResponse verser (@RequestParam String code,@RequestParam double montant, @RequestParam Long codeEmp){
         return compteMetier.verser(code, montant, codeEmp);
     }
 
     @PostMapping("/retirer")
-    public Compte retirer (@RequestParam String code,@RequestParam double montant, @RequestParam Long codeEmp){
+    public CompteResponse retirer (@RequestParam String code,@RequestParam double montant, @RequestParam Long codeEmp){
         return compteMetier.retirer(code, montant, codeEmp);
     }
 
     @PostMapping("/virement")
-    public Compte virement (@RequestParam String cpte1, @RequestParam String cpte2,@RequestParam double montant,
+    public CompteResponse virement (@RequestParam String cpte1, @RequestParam String cpte2,@RequestParam double montant,
     @RequestParam Long codeEmp){
         return compteMetier.virement(cpte1, cpte2, montant, codeEmp);
     }
