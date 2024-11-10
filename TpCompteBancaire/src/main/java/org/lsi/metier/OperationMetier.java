@@ -1,13 +1,14 @@
 package org.lsi.metier;
 
-import org.lsi.entities.Operation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import org.lsi.dto.OperationRequest;
+import org.lsi.dto.OperationResponse;
 import java.util.List;
 
 public interface OperationMetier {
-    Operation saveOperation(Operation op);
-    List<Operation> listOperation();
-    Page<Operation> listOperationCompte(String codeCompte, Pageable pageable);
+    OperationResponse saveOperation(OperationRequest request);
+    List<OperationResponse> listOperation();
+    OperationResponse verser(OperationRequest request);
+    OperationResponse retirer(OperationRequest request);
+    OperationResponse virement(OperationRequest request);
+    List<OperationResponse> getOperationsByCompte(String codeCompte);
 }

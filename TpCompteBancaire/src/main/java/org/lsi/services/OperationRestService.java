@@ -1,12 +1,10 @@
 package org.lsi.services;
 
-import org.lsi.entities.Operation;
-import org.lsi.entities.Versement;
-import org.lsi.entities.Retrait;
+import org.lsi.dto.OperationRequest;
+import org.lsi.dto.OperationResponse;
 import org.lsi.metier.OperationMetier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,22 +18,39 @@ public class OperationRestService {
     private OperationMetier operationMetier;
 
     @PostMapping("/versement")
-    public Operation saveVersement(@RequestBody Versement versement) {
-        return operationMetier.saveOperation(versement);
+    public ResponseEntity<OperationResponse> saveVersement(@RequestBody OperationRequest request) {
+        request.setTypeOperation("VERSEMENT");
+        return ResponseEntity.ok(operationMetier.saveOperation(request));
     }
 
     @PostMapping("/retrait")
-    public Operation saveRetrait(@RequestBody Retrait retrait) {
-        return operationMetier.saveOperation(retrait);
+    public ResponseEntity<OperationResponse> saveRetrait(@RequestBody OperationRequest request) {
+        request.setTypeOperation("RETRAIT");
+        return ResponseEntity.ok(operationMetier.saveOperation(request));
+    }
+
+    @PostMapping("/virement")
+    public ResponseEntity<OperationResponse> virement(@RequestBody OperationRequest request) {
+        return ResponseEntity.ok(operationMetier.virement(request));
     }
 
     @GetMapping
-    public List<Operation> listOperations() {
-        return operationMetier.listOperation();
+    public ResponseEntity<List<OperationResponse>> listOperations() {
+        return ResponseEntity.ok(operationMetier.listOperation());
     }
 
-    @GetMapping("/compte/{codeCompte}")
-    public Page<Operation> listOperationsCompte(@PathVariable String codeCompte, Pageable pageable) {
-        return operationMetier.listOperationCompte(codeCompte, pageable);
+    @GetMapping("/{codeCompte}")
+    public ResponseEntity<List<OperationResponse>> getOperationsByCompte(@PathVariable String codeCompte) {
+        return ResponseEntity.ok(operationMetier.getOperationsByCompte(codeCompte));
+    }
+
+    @PostMapping("/verser")
+    public ResponseEntity<OperationResponse> verser(@RequestBody OperationRequest request) {
+        return ResponseEntity.ok(operationMetier.verser(request));
+    }
+
+    @PostMapping("/retirer")
+    public ResponseEntity<OperationResponse> retirer(@RequestBody OperationRequest request) {
+        return ResponseEntity.ok(operationMetier.retirer(request));
     }
 }
