@@ -5,7 +5,7 @@
       <div class="card rounded-2 bg-primary text-white">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="card-title">Clients</h5>
-          <h6>x200</h6>
+          <h6>{{ quantities.Client ? 'x'+quantities.Client : ''  }}</h6>
         </div>
         <div class="card-body">
           <a href="#" routerLink="/clients" class="text-decoration-none text-white d-flex align-items-center gap-2 btn-med">
@@ -20,7 +20,7 @@
       <div class="card rounded-2 bg-warning text-white">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="card-title">Employees</h5>
-          <h6>x200</h6>
+          <h6>{{ quantities.Employe ? 'x'+quantities.Employe : ''  }}</h6>
         </div>
         <div class="card-body">
           <a href="#" routerLink="/employees" class="text-decoration-none text-white d-flex align-items-center gap-2 btn-med">
@@ -35,7 +35,7 @@
       <div class="card rounded-2 bg-danger text-white">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="card-title">Groups</h5>
-          <h6>x200</h6>
+          <h6>{{ quantities.Groupe ? 'x'+quantities.Groupe : ''  }}</h6>
         </div>
         <div class="card-body">
           <a href="#" routerLink="/groups" class="text-decoration-none text-white d-flex align-items-center gap-2 btn-med">
@@ -50,7 +50,7 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h5>Stats</h5>
+          <h5>Effectifs et Groupes</h5>
         </div>
         <div class="card-body">
           <div>
@@ -64,7 +64,7 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h5>Stats</h5>
+          <h5>Répartition des Entités Opérationnelles</h5>
         </div>
         <div class="card-body">
           <div>

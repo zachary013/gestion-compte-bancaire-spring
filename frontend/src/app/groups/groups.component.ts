@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {EmployeesService} from '../employees.service';
 import {Router} from '@angular/router';
 import {GroupsService} from '../groups.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-groups',
@@ -29,19 +30,50 @@ export class GroupsComponent implements OnInit{
 
   addGroup() {
     if(this.group.nomGroupe != ""){
-      this.groupsService.add(this.group).subscribe((res) => {
-        this.getAllGroup();
-      })
+      this.groupsService.add(this.group).subscribe({
+        next: (res) => {
+          Swal.fire({
+            title: "Succès",
+            text: "Ajout effectué avec succès!",
+            icon: "success"
+          });
+          this.getAllGroup();
+        },
+        error: (err) => {
+          console.error('Erreur lors d\'ajout de group:', err)
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors d'ajout de group!",
+            icon: "error"
+          });
+        }
+        }
+      )
     }
 
   }
 
   updateGroup() {
-    this.groupsService.update(this.newGroup.codeGroupe, this.newGroup).subscribe((res) => {
+    this.groupsService.update(this.newGroup.codeGroupe, this.newGroup).subscribe({
+      next: (res) => {
+        Swal.fire({
+          title: "Succès",
+          text: "Modification effectué avec succès!",
+          icon: "success"
+        });
+        this.getAllGroup();
 
-      this.getAllGroup();
-
-    });
+      },
+      error: (err) => {
+        console.error('Erreur lors de modifier de group:', err)
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors de modifier de group!",
+          icon: "error"
+        });
+      }
+      }
+    );
   }
 
 
@@ -58,9 +90,23 @@ export class GroupsComponent implements OnInit{
   }
 
   deleteGroup(codeGroup: number){
-    this.groupsService.delete(codeGroup).subscribe((res: any) => {
-      this.groups = res;
-      this.getAllGroup();  // Reload the employee list after deletion
+    this.groupsService.delete(codeGroup).subscribe({
+      next: (res: any) => {
+        this.groups = res;
+        Swal.fire({
+          title: "Succès",
+          text: "Suppression effectué avec succès!",
+          icon: "success"
+        });
+        this.getAllGroup();  // Reload the employee list after deletion
+      },
+      error: err => {
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors de suppression de group!",
+          icon: "error"
+        });
+      }
     });
   }
 

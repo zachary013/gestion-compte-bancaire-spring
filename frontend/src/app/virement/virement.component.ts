@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OperationService, OperationRequest, OperationResponse } from '../operation.service';
 import { ClientService, ClientResponse, CompteResponse } from '../client.service';
 import { EmployeesService, EmployeResponse } from '../employees.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-virement',
@@ -81,9 +82,20 @@ export class VirementComponent implements OnInit {
       this.operationService.virement(this.virementRequest).subscribe({
         next: (response) => {
           this.virementResponse = response;
-          alert('Virement effectué avec succès');
+          Swal.fire({
+            title: "Succès",
+            text: "Virement effectué avec succès!",
+            icon: "success"
+          });
         },
-        error: (err) => console.error('Erreur lors du virement:', err)
+        error: (err) =>  {
+          console.error('Erreur lors du virement:', err)
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors du virement!",
+            icon: "error"
+          });
+        }
       });
     } else {
       alert('Veuillez remplir tous les champs requis pour le virement.');

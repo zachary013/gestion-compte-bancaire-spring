@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService, EmployeRequest, EmployeResponse } from '../employees.service';
 import { GroupsService } from '../groups.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employe',
@@ -52,11 +53,19 @@ export class EmployeComponent implements OnInit {
       (res: EmployeResponse) => {
         this.getAllEmployees();
         this.newEmployee = { nomEmploye: '', codeEmployeSuperieur: undefined, codesGroupes: [] };
-        this.showAlertMessage('Employé ajouté avec succès');
-      },
+        Swal.fire({
+          title: "Succès",
+          text: "Ajout effectué avec succès!",
+          icon: "success"
+        });
+        },
       (error: any) => {
         console.error("Error adding employee:", error);
-        this.showAlertMessage('Erreur lors de l\'ajout de l\'employé', false);
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors d'ajout d'employé!",
+          icon: "error"
+        });
       }
     );
   }
@@ -89,11 +98,19 @@ export class EmployeComponent implements OnInit {
     this.employeesService.deleteEmploye(codeEmploye).subscribe(
       () => {
         this.getAllEmployees();
-        this.showAlertMessage('Employé supprimé avec succès');
-      },
+        Swal.fire({
+          title: "Succès",
+          text: "Suppression effectué avec succès!",
+          icon: "success"
+        });
+        },
       (error: any) => {
         console.error("Error deleting employee:", error);
-        this.showAlertMessage('Erreur lors de la suppression de l\'employé', false);
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors de suppression d'employé!",
+          icon: "error"
+        });
       }
     );
   }
@@ -111,13 +128,23 @@ export class EmployeComponent implements OnInit {
     if (this.editingEmployeeId !== null) {
       this.employeesService.updateEmploye(this.editingEmployeeId, this.editingEmployee).subscribe(
         (res: EmployeResponse) => {
+          Swal.fire({
+            title: "Succès",
+            text: "Modification effectué avec succès!",
+            icon: "success"
+          });
+
           this.getAllEmployees();
           this.editingEmployeeId = null;
-          this.showAlertMessage('Employé mis à jour avec succès');
+
         },
         (error: any) => {
           console.error("Error updating employee:", error);
-          this.showAlertMessage('Erreur lors de la mise à jour de l\'employé', false);
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors de modification d'employé!",
+            icon: "error"
+          });
         }
       );
     }

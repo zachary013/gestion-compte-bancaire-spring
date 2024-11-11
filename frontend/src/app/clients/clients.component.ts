@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ClientService } from '../client.service';
 import { Modal } from 'bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-clients',
@@ -69,11 +70,23 @@ export class ClientsComponent implements OnInit {
     if (this.addForm.valid) {
       this.clientService.addClient(this.newClient).subscribe({
         next: () => {
+          Swal.fire({
+            title: "Succès",
+            text: "Ajout effectué avec succès!",
+            icon: "success"
+          });
           this.getAllClients();
           this.modals['addClientModal']?.hide();
           this.newClient = { nomClient: '', email: '', dateNaissance: '', telephone: '', adresse: '', ville: '', pays: '' };
         },
-        error: () => this.errorMessage = "Erreur lors de l'ajout du client"
+        error: () => {
+          this.errorMessage = "Erreur lors de l'ajout du client"
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors de modification de l'ajout du client!",
+            icon: "error"
+          });
+        }
       });
     }
   }
@@ -124,6 +137,11 @@ export class ClientsComponent implements OnInit {
       this.clientService.updateClient(clientToUpdate.codeClient, clientToUpdate)
         .subscribe({
           next: () => {
+            Swal.fire({
+              title: "Succès",
+              text: "Modification effectué avec succès!",
+              icon: "success"
+            });
             this.getAllClients();
             this.modals['editModal']?.hide();
             this.selectedClient = null;
@@ -132,6 +150,11 @@ export class ClientsComponent implements OnInit {
           error: (error) => {
             this.errorMessage = 'Erreur lors de la mise à jour du client: ' +
               (error.error?.message || 'Une erreur est survenue');
+            Swal.fire({
+              title: "Erreur",
+              text: "Erreur lors de modification de client!",
+              icon: "error"
+            });
           }
         });
     }
@@ -146,12 +169,22 @@ export class ClientsComponent implements OnInit {
     if (this.clientToDelete) {
       this.clientService.deleteClient(this.clientToDelete.codeClient).subscribe({
         next: () => {
+          Swal.fire({
+            title: "Succès",
+            text: "Suppression effectué avec succès!",
+            icon: "success"
+          });
           this.getAllClients();
           this.modals['deleteModal']?.hide();
           this.clientToDelete = null;
         },
         error: (error) => {
           this.errorMessage = 'Erreur lors de la suppression du client';
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors de suppression du client!",
+            icon: "error"
+          });
         }
       });
     }

@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
 
 
 
-  // Create a Bar Chart for the first "Stats" card
   createBarChart(): void {
     const barChartCtx = document.getElementById('myBarChart') as HTMLCanvasElement;
 
@@ -57,12 +56,16 @@ export class DashboardComponent implements OnInit {
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1 // Now inside the ticks object
+            }
           }
         }
       }
     });
   }
+
 
   // Create a Doughnut Chart for the second "Stats" card
   createDoughnutChart(): void {
@@ -97,7 +100,7 @@ export class DashboardComponent implements OnInit {
           tooltip: {
             callbacks: {
               label: (tooltipItem) => {
-                return tooltipItem.label + ': ' + tooltipItem.raw + ' votes';
+                return tooltipItem.label + ': ' + tooltipItem.raw ;
               }
             }
           }

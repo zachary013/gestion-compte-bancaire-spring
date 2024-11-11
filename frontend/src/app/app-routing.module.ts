@@ -11,6 +11,7 @@ import {OperationComponent} from './operation/operation.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {GroupsComponent} from './groups/groups.component';
 import {NotfoundComponent} from './notfound/notfound.component';
+import {RetraitComponent} from './retrait/retrait.component';
 
 const routes: Routes = [
   {path:'login',component:LoginComponent},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path:'operations', component:OperationComponent},
   {path:'employees', component:EmployeComponent},
   {path:'groups', component:GroupsComponent},
+  {path:'retrait', component:RetraitComponent},
   {path: '**', component:NotfoundComponent}
 ];
 
