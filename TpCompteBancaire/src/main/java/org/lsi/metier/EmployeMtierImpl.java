@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeMtierImpl implements EmployeMetier {
@@ -86,6 +87,21 @@ public class EmployeMtierImpl implements EmployeMetier {
         }
         return employeResponseList;
     }
+
+    @Override
+    public List<EmployeResponse> getEmployesParGroupe(Long codeGroupe) {
+        Groupe groupe = groupeRepository.findById(codeGroupe)
+                .orElseThrow(() -> new RuntimeException("Groupe non trouvé"));
+
+        // Récupérer les employés associés au groupe
+        List<Employe> employes = (List<Employe>) groupe.getEmployes();
+
+        // Convertir les employés en réponses DTO
+        return employes.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public EmployeResponse getEmploye(Long codeEmploye) {

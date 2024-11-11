@@ -9,7 +9,10 @@ import {GroupsService} from '../groups.service';
   styleUrl: './groups.component.scss'
 })
 export class GroupsComponent implements OnInit{
-  constructor(private groupsService: GroupsService, private router:Router) {}
+  constructor(
+    private groupsService: GroupsService,
+    private router:Router
+  ) {}
 
   groups : any ;
   group : any = {
@@ -27,6 +30,7 @@ export class GroupsComponent implements OnInit{
   currentPage: number = 1;
   itemsPerPage: number = 5;
   totalItems: number = 0;
+
 
   ngOnInit(): void {
     this.getAllGroup(); // Corrected to use 'this'

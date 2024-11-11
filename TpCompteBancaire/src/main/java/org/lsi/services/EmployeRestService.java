@@ -38,6 +38,11 @@ public class EmployeRestService {
         return employeMetier.getEmploye(codeEmploye);
     }
 
+    @GetMapping("/groupe/{codeGroupe}")
+    public List<EmployeResponse> getEmployesParGroupe(@PathVariable Long codeGroupe) {
+        return employeMetier.getEmployesParGroupe(codeGroupe);
+    }
+
     @DeleteMapping("/{codeEmploye}")
     public void deleteEmploye(@PathVariable Long codeEmploye) {
         employeMetier.deleteEmploye(codeEmploye);
