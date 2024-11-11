@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ComptesService } from '../comptes.service';
 import { Router } from '@angular/router';
 import {ClientService} from '../client.service';
-import {ClientsComponent} from '../clients/clients.component';
 import {EmployeesService} from '../employees.service';
 
 @Component({

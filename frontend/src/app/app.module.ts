@@ -16,6 +16,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupsComponent } from './groups/groups.component';
 import {Select2Module} from "ng-select2-component";
 import {FormsModule} from "@angular/forms";
+import { NotfoundComponent } from './notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {FormsModule} from "@angular/forms";
     OperationComponent,
     DashboardComponent,
     GroupsComponent,
-    OperationComponent
+    OperationComponent,
+    NotfoundComponent
   ],
     imports: [
         BrowserModule,

@@ -10,6 +10,19 @@ export class AppComponent implements OnInit {
   isSidebarCollapsed: boolean = false;
   isAuthPage: boolean = false;
 
+  menuItems = [
+    { label: 'Dashboard', route: '/dashboard', icon: 'fa-solid fa-gauge' },
+    { label: 'Clients', route: '/clients', icon: 'fa-solid fa-person' },
+    { label: 'Versement', route: '/versement', icon: 'fa-solid fa-money-bill' },
+    { label: 'Virements', route: '/virement', icon: 'fa-solid fa-money-bill-transfer' },
+    { label: 'Comptes', route: '/comptes', icon: 'fa-solid fa-file-invoice' },
+    { label: 'Operations', route: '/operations', icon: 'fa-regular fa-file' },
+    { label: 'Groups', route: '/groups', icon: 'fa-solid fa-user-group' },
+    { label: 'Employees', route: '/employees', icon: 'fa-solid fa-user' },
+  ];
+
+
+
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }

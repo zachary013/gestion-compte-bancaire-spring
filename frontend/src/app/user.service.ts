@@ -15,4 +15,15 @@ export class UserService {
       headers: new HttpHeaders().set('Content-Type','application/json')
     })
   }
+
+
+  login(data:any){
+    return this.httpClient.post(this.url+
+      "/login",data, {
+      headers: new HttpHeaders().set('Content-Type','application/json')
+    })
+  }
+
+
+
 }
