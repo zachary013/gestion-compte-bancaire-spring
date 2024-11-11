@@ -1,8 +1,6 @@
 package org.lsi.dto;
 
 import lombok.Data;
-import org.lsi.entities.Client;
-import org.lsi.entities.Employe;
 import org.lsi.entities.Operation;
 
 import java.util.Date;
