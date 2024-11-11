@@ -14,4 +14,8 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
     List<Operation> findByCompte(Compte compte);
 
     Page<Operation> findByCompteCodeCompte(String codeCompte, Pageable pageable);
+
+    @Query("SELECT COUNT(o) FROM Operation o")
+    Long countTotalOperations(); // Custom query to count total operations
+
 }
