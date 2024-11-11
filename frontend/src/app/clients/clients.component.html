@@ -169,6 +169,7 @@
                 <th>Solde</th>
                 <th>Taux</th>
                 <th>Decouvert</th>
+                <th>Date de création</th>
               </tr>
               </thead>
               <tbody>
@@ -178,6 +179,7 @@
                 <td>{{ compte.solde }}</td>
                 <td>{{ compte.taux }}</td>
                 <td>{{ compte.decouvert }}</td>
+                <td>{{ compte.dateCreation | date:'dd/MM/yyyy' }}</td>
               </tr>
               </tbody>
             </table>

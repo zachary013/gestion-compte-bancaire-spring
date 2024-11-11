@@ -16,7 +16,10 @@ export interface ClientRequest {
 
 export interface CompteResponse {
   codeCompte: number;
+  typeCompte: string;
   solde: number;
+  taux: number;
+  decouvert: number;
   dateCreation: Date;
 }
 

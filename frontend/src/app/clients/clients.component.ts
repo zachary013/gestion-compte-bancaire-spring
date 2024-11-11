@@ -102,6 +102,7 @@ export class ClientsComponent implements OnInit {
     });
   }
 
+
   saveEditedClient() {
     if (this.selectedClient && this.editForm.valid) {
       const clientToUpdate = {
