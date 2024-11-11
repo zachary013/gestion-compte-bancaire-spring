@@ -47,7 +47,7 @@ The **Bank of Morocco** is a web-based banking application designed to manage cu
    cd bank-of-morocco
   ```
 - Set up the database in **MySQL**:
-   - Create a new database `bank_of_morocco`.
+   - Create a new database `db_banque_lsi`.
    - Update the database connection properties in `application.properties`.
 
 - Build and run the Spring Boot application:
