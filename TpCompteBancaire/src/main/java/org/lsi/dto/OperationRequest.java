@@ -14,8 +14,8 @@ public class OperationRequest {
     @NotBlank(message = "Le code du compte est requis")
     private String codeCompte;
 
-    private String codeCompte1;  // Source account
-    private String codeCompte2;  // Destination account
+    @NotBlank(message = "Le code du compte destination est requis")
+    private String codeCompteDest;  // Destination account
 
     @NotNull(message = "Le code de l'employé est requis")
     private Long codeEmploye;

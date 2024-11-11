@@ -10,10 +10,8 @@ public class OperationResponse {
     private Date dateOperation;
     private double montant;
     private String type;  // "VERSEMENT" ou "RETRAIT"
-    private String codeCompte;
-    private String codeCompte1;  // Source account
-    private String codeCompte2;  // Destination account
+    private String codeCompte;  // Source account
+    private String codeCompteDest;  // Destination account
     private Double soldeApresOperation;
     private String nomEmploye;
-    private String prenomEmploye;
 }

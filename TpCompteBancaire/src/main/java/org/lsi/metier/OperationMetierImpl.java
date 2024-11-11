@@ -3,7 +3,6 @@ package org.lsi.metier;
 import org.lsi.dao.CompteRepository;
 import org.lsi.dao.EmployeRepository;
 import org.lsi.dao.OperationRepository;
-import org.lsi.dto.CompteResponse;
 import org.lsi.dto.OperationRequest;
 import org.lsi.dto.OperationResponse;
 import org.lsi.entities.Compte;
@@ -34,13 +33,12 @@ public class OperationMetierImpl implements OperationMetier {
     @Override
     public OperationResponse saveOperation(OperationRequest request) {
         Compte compte = compteRepository.findById(request.getCodeCompte())
-                .orElseThrow(() -> new RuntimeException("Compte non trouvé"));
+                .orElseThrow(() -> new RuntimeException("Compte source non trouvé"));
 
         Employe employe = employeRepository.findById(request.getCodeEmploye())
                 .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
 
         Operation operation;
-        // Create appropriate operation type based on request
         if ("VERSEMENT".equals(request.getTypeOperation())) {
             operation = new Versement();
             compte.setSolde(compte.getSolde() + request.getMontant());
@@ -59,8 +57,9 @@ public class OperationMetierImpl implements OperationMetier {
         operation.setCompte(compte);
         operation.setEmploye(employe);
 
+        Operation savedOperation = operationRepository.save(operation);
         compteRepository.save(compte);
-        return convertToOperationDTO(operationRepository.save(operation));
+        return convertToOperationDTO(savedOperation);
     }
 
     @Override
@@ -84,12 +83,12 @@ public class OperationMetierImpl implements OperationMetier {
         Versement versement = new Versement(new Date(), request.getMontant());
         versement.setCompte(compte);
         versement.setEmploye(employe);
-        operationRepository.save(versement);
 
         compte.setSolde(compte.getSolde() + request.getMontant());
         compteRepository.save(compte);
 
-        return convertToOperationDTO(versement);
+        Operation savedOperation = operationRepository.save(versement);
+        return convertToOperationDTO(savedOperation);
     }
 
 
@@ -101,41 +100,76 @@ public class OperationMetierImpl implements OperationMetier {
 
         Compte compte = compteRepository.findById(request.getCodeCompte())
                 .orElseThrow(() -> new RuntimeException("Compte non trouvé"));
-        Employe employe = employeRepository.findById(request.getCodeEmploye())
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
 
         if (compte.getSolde() < request.getMontant()) {
             throw new RuntimeException("Solde insuffisant");
         }
 
+        Employe employe = employeRepository.findById(request.getCodeEmploye())
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
         Retrait retrait = new Retrait(new Date(), request.getMontant());
         retrait.setCompte(compte);
         retrait.setEmploye(employe);
-        operationRepository.save(retrait);
 
         compte.setSolde(compte.getSolde() - request.getMontant());
         compteRepository.save(compte);
 
-        return convertToOperationDTO(retrait);
+        Operation savedOperation = operationRepository.save(retrait);
+        return convertToOperationDTO(savedOperation);
     }
 
 
     @Override
     @Transactional
     public OperationResponse virement(OperationRequest request) {
-        // Vérifiez et retirez le montant du compte source
-        OperationRequest retraitRequest = new OperationRequest();
-        retraitRequest.setCodeCompte(request.getCodeCompte1());
-        retraitRequest.setMontant(request.getMontant());
-        retraitRequest.setCodeEmploye(request.getCodeEmploye());
-        retirer(retraitRequest);
+        if (request.getMontant() <= 0) {
+            throw new IllegalArgumentException("Le montant du virement doit être positif");
+        }
 
-        // Versez le montant dans le compte de destination
-        OperationRequest versementRequest = new OperationRequest();
-        versementRequest.setCodeCompte(request.getCodeCompte2());
-        versementRequest.setMontant(request.getMontant());
-        versementRequest.setCodeEmploye(request.getCodeEmploye());
-        return verser(versementRequest);
+        if (request.getCodeCompte().equals(request.getCodeCompteDest())) {
+            throw new IllegalArgumentException("Le compte source et destination ne peuvent pas être identiques");
+        }
+
+        // Get source account
+        Compte compteSource = compteRepository.findById(request.getCodeCompte())
+                .orElseThrow(() -> new RuntimeException("Compte source non trouvé"));
+
+        // Get destination account
+        Compte compteDest = compteRepository.findById(request.getCodeCompteDest())
+                .orElseThrow(() -> new RuntimeException("Compte destination non trouvé"));
+
+        // Check if source account has sufficient balance
+        if (compteSource.getSolde() < request.getMontant()) {
+            throw new RuntimeException("Solde insuffisant pour effectuer le virement");
+        }
+
+        Employe employe = employeRepository.findById(request.getCodeEmploye())
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
+        // Create retrait operation for source account
+        Retrait retrait = new Retrait(new Date(), request.getMontant());
+        retrait.setCompte(compteSource);
+        retrait.setCompteDestination(compteDest);
+        retrait.setEmploye(employe);
+
+        // Create versement operation for destination account
+        Versement versement = new Versement(new Date(), request.getMontant());
+        versement.setCompte(compteDest);
+        versement.setCompteDestination(compteSource);
+        versement.setEmploye(employe);
+
+        // Update balances
+        compteSource.setSolde(compteSource.getSolde() - request.getMontant());
+        compteDest.setSolde(compteDest.getSolde() + request.getMontant());
+
+        // Save everything
+        compteRepository.save(compteSource);
+        compteRepository.save(compteDest);
+        operationRepository.save(retrait);
+        Operation savedOperation = operationRepository.save(versement);
+
+        return convertToOperationDTO(savedOperation);
     }
 
 
@@ -152,27 +186,31 @@ public class OperationMetierImpl implements OperationMetier {
     }
 
     private OperationResponse convertToOperationDTO(Operation operation) {
-        OperationResponse operationResponse = new OperationResponse();
-        operationResponse.setCodeOperation(operation.getNumeroOperation());
-        operationResponse.setDateOperation(operation.getDateOperation());
-        operationResponse.setMontant(operation.getMontant());
+        OperationResponse response = new OperationResponse();
+        response.setCodeOperation(operation.getNumeroOperation());
+        response.setDateOperation(operation.getDateOperation());
+        response.setMontant(operation.getMontant());
 
         if (operation instanceof Versement) {
-            operationResponse.setType("VERSEMENT");
+            response.setType("VERSEMENT");
         } else if (operation instanceof Retrait) {
-            operationResponse.setType("RETRAIT");
+            response.setType("RETRAIT");
         }
 
         if (operation.getCompte() != null) {
-            operationResponse.setCodeCompte(operation.getCompte().getCodeCompte());
-            operationResponse.setSoldeApresOperation(operation.getCompte().getSolde());
+            response.setCodeCompte(operation.getCompte().getCodeCompte());
+            response.setSoldeApresOperation(operation.getCompte().getSolde());
+        }
+
+        if (operation.getCompteDestination() != null) {
+            response.setCodeCompteDest(operation.getCompteDestination().getCodeCompte());
         }
 
         if (operation.getEmploye() != null) {
-            operationResponse.setNomEmploye(operation.getEmploye().getNomEmploye());
+            response.setNomEmploye(operation.getEmploye().getNomEmploye());
         }
 
-        return operationResponse;
+        return response;
     }
 
 }

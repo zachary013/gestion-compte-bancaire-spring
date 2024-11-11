@@ -16,9 +16,13 @@ public abstract class Operation implements Serializable {
     private Date dateOperation;
     private double montant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CODE_CPTE")
-    private Compte compte;
+    private Compte compte;  // Source account reference
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CODE_CPTE_DEST")
+    private Compte compteDestination;
 
     @ManyToOne
     @JoinColumn(name = "CODE_EMP")
