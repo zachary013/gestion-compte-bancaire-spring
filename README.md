@@ -82,6 +82,10 @@ We welcome contributions! To get started:
 - Push to the branch (`git push origin feature-name`).
 - Open a pull request.
 
+## Directed by 
+- BAHASSOU Mohamed Amine
+- AZARKAN Zakaria
+
 ## License
 
 This project is licensed under the MIT License.
