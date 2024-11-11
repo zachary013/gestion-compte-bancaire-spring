@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService, EmployeRequest, EmployeResponse } from '../employees.service';
 import { GroupsService } from '../groups.service';
+import {OperationResponse} from '../operation.service';
 
 @Component({
   selector: 'app-employe',
@@ -24,6 +25,11 @@ export class EmployeComponent implements OnInit {
   };
   editingEmployeeId: number | null = null;
   groups: { codeGroupe: number; nomGroupe: string }[] = [];
+
+  // Pagination variables
+  currentPage: number = 1;
+  itemsPerPage: number = 7;
+  totalItems: number = 0;
 
   constructor(
     private employeesService: EmployeesService,
@@ -77,6 +83,7 @@ export class EmployeComponent implements OnInit {
     this.employeesService.listEmployes().subscribe(
       (res: EmployeResponse[]) => {
         this.employees = res;
+        this.totalItems = this.employees.length;
       },
       (error: any) => {
         console.error("Error fetching employees:", error);
@@ -135,5 +142,23 @@ export class EmployeComponent implements OnInit {
     setTimeout(() => {
       this.showAlert = false;
     }, 3000);
+  }
+
+  // Pagination methods
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
+
+  get paginatedEmployees() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.employees.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
   }
 }

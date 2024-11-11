@@ -4,8 +4,7 @@ import org.lsi.dao.ClientRepository;
 import org.lsi.dto.ClientRequest;
 import org.lsi.dto.ClientResponse;
 import org.lsi.dto.CompteResponse;
-import org.lsi.entities.Client;
-import org.lsi.entities.Compte;
+import org.lsi.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,8 +151,21 @@ public class ClientMetierImpl implements ClientMetier {
     private CompteResponse convertCompteToDTO(Compte compte) {
         CompteResponse dto = new CompteResponse();
         dto.setCodeCompte(compte.getCodeCompte());
-        dto.setSolde(compte.getSolde());
         dto.setDateCreation(compte.getDateCreation());
+        dto.setSolde(compte.getSolde());
+        dto.setCodeClient(compte.getClient().getCodeClient());
+        dto.setCodeEmploye(compte.getEmploye().getCodeEmploye());
+
+        // Setting the type of account
+        if (compte instanceof CompteCourant) {
+            dto.setTypeCompte("COURANT");
+            dto.setDecouvert(((CompteCourant) compte).getDecouvert());  // specific to CompteCourant
+        } else if (compte instanceof CompteEpargne) {
+            dto.setTypeCompte("EPARGNE");
+            dto.setTaux(((CompteEpargne) compte).getTaux());  // specific to CompteEpargne
+        }
+
         return dto;
     }
+
 }

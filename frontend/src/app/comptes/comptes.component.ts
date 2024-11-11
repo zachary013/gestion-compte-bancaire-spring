@@ -26,6 +26,11 @@ export class ComptesComponent implements OnInit {
   clients : any ;
   employees : any ;
 
+  // Pagination variables
+  currentPage: number = 1;
+  itemsPerPage: number = 7;
+  totalItems: number = 0;
+
   constructor(private comptesService: ComptesService, private clientService: ClientService, private employeesService: EmployeesService, private router: Router) { }
 
   ngOnInit(): void {
@@ -50,8 +55,8 @@ export class ComptesComponent implements OnInit {
   // Fetch all comptes from the service
   getAllComptes() {
     this.comptesService.getComptes().subscribe((res: any) => {
-      console.log("API response:", res);  // Debugging step
       this.comptes = res;
+      this.totalItems = this.comptes.length;
     });
   }
 
@@ -115,6 +120,23 @@ export class ComptesComponent implements OnInit {
     });
   }
 
+  // Pagination methods
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
 
+  get paginatedComptes() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.comptes.slice(startIndex, startIndex + this.itemsPerPage);
+  }
 
+  get totalPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
+  }
+
+  protected readonly Math = Math;
 }

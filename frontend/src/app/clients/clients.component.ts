@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ClientService } from '../client.service';
+import {ClientResponse, ClientService} from '../client.service';
 import { Modal } from 'bootstrap';
 
 @Component({
@@ -27,6 +27,11 @@ export class ClientsComponent implements OnInit {
   clientAccounts: any[] = [];
   errorMessage: string = '';
 
+  // Pagination variables
+  currentPage: number = 1;
+  itemsPerPage: number = 7;
+  totalItems: number = 0;
+
   private modals: { [key: string]: Modal } = {};
 
   constructor(private clientService: ClientService) {}
@@ -46,9 +51,9 @@ export class ClientsComponent implements OnInit {
   }
 
   getAllClients() {
-    this.clientService.getClients().subscribe({
-      next: (res) => this.clients = res,
-      error: (error) => this.errorMessage = 'Erreur lors du chargement des clients'
+    this.clientService.getClients().subscribe((res: any) => {
+      this.clients = res;
+      this.totalItems = this.clients.length;
     });
   }
 
@@ -160,4 +165,24 @@ export class ClientsComponent implements OnInit {
   ngOnDestroy() {
     Object.values(this.modals).forEach(modal => modal.dispose());
   }
+
+  // Pagination methods
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
+
+  get paginatedClients() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.clients.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
+  }
+
+  protected readonly Math = Math;
 }

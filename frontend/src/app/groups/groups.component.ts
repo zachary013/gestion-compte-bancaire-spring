@@ -23,6 +23,11 @@ export class GroupsComponent implements OnInit{
     "employes": []
   };
 
+  // Pagination variables
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalItems: number = 0;
+
   ngOnInit(): void {
     this.getAllGroup(); // Corrected to use 'this'
   }
@@ -52,16 +57,36 @@ export class GroupsComponent implements OnInit{
 
   getAllGroup() {
     this.groupsService.getGroupes().subscribe((res: any) => {
-      console.log("API response:", res); // Add this to see the structure of `res`
       this.groups = res;
+      this.totalItems = this.groups.length;
     });
   }
 
   deleteGroup(codeGroup: number){
     this.groupsService.delete(codeGroup).subscribe((res: any) => {
       this.groups = res;
-      this.getAllGroup();  // Reload the employee list after deletion
+      this.getAllGroup();
     });
   }
+
+  // Pagination methods
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
+
+  get paginatedGroups() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.groups.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    return Array(this.totalPages).fill(0).map((x, i) => i + 1);
+  }
+
+  protected readonly Math = Math;
 
 }

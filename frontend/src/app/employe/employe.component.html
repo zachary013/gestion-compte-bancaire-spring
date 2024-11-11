@@ -1,12 +1,12 @@
 <div class="container pb-2">
-  <div *ngIf="showAlert" class="alert" [ngClass]="{'alert-success': alertMessage.includes('succès'), 'alert-danger': !alertMessage.includes('succès')}" role="alert">
+  <div *ngIf="showAlert" [ngClass]="{'alert-success': alertMessage.includes('succès'), 'alert-danger': !alertMessage.includes('succès')}" class="alert" role="alert">
     {{ alertMessage }}
   </div>
   <!-- Card for Employee List -->
   <div class="card">
     <div class="card-header d-flex justify-content-between">
       <h5 class="mb-0">Liste des employés</h5>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-employee">
+      <button class="btn btn-primary" data-bs-target="#create-employee" data-bs-toggle="modal">
         Ajouter Employé
       </button>
     </div>
@@ -21,18 +21,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let employee of employees">
+        <tr *ngFor="let employee of paginatedEmployees">
           <td>{{ employee.codeEmploye }}</td>
           <td>{{ employee.nomEmploye }}</td>
           <td>{{ employee.codeEmployeSuperieur || '-' }}</td>
           <td class="d-flex gap-2">
-            <button class="btn btn-info" (click)="prepareEditEmployee(employee)" data-bs-toggle="modal" data-bs-target="#edit-employee">
+            <button (click)="prepareEditEmployee(employee)" class="btn btn-info" data-bs-target="#edit-employee" data-bs-toggle="modal">
               Modifier
             </button>
             <button class="btn btn-warning">
               Voir Opérations
             </button>
-            <button class="btn btn-danger" (click)="deleteEmployee(employee.codeEmploye)">
+            <button (click)="deleteEmployee(employee.codeEmploye)" class="btn btn-danger">
               Supprimer
             </button>
           </td>
@@ -40,6 +40,23 @@
         </tbody>
       </table>
     </div>
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let page of pageNumbers" [class.active]="currentPage === page">
+          <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 
   <!-- Modal for Editing Employee -->
@@ -48,28 +65,28 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Modifier Employé</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
         </div>
         <div class="modal-body">
           <form (ngSubmit)="updateEmployee()">
             <div class="mb-3">
-              <label for="editNomEmploye" class="form-label">Nom Employé</label>
-              <input type="text" class="form-control" id="editNomEmploye" [(ngModel)]="editingEmployee.nomEmploye" name="nomEmploye" required>
+              <label class="form-label" for="editNomEmploye">Nom Employé</label>
+              <input [(ngModel)]="editingEmployee.nomEmploye" class="form-control" id="editNomEmploye" name="nomEmploye" required type="text">
             </div>
             <div class="mb-3">
-              <label for="editCodeSupEmployee" class="form-label">Supérieur</label>
-              <select class="form-select" id="editCodeSupEmployee" [(ngModel)]="editingEmployee.codeEmployeSuperieur" name="codeEmployeSuperieur">
+              <label class="form-label" for="editCodeSupEmployee">Supérieur</label>
+              <select [(ngModel)]="editingEmployee.codeEmployeSuperieur" class="form-select" id="editCodeSupEmployee" name="codeEmployeSuperieur">
                 <option [ngValue]="undefined">Aucun supérieur</option>
                 <option *ngFor="let emp of employees" [ngValue]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="editGroupes" class="form-label">Groupes</label>
-              <select class="form-select" id="editGroupes" [ngModel]="editingEmployee.codesGroupes" (change)="onGroupSelectionChange($event, editingEmployee)" name="codesGroupes">
+              <label class="form-label" for="editGroupes">Groupes</label>
+              <select (change)="onGroupSelectionChange($event, editingEmployee)" [ngModel]="editingEmployee.codesGroupes" class="form-select" id="editGroupes" name="codesGroupes">
                 <option *ngFor="let group of groups" [value]="group.codeGroupe">{{ group.nomGroupe }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Mettre à jour</button>
+            <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Mettre à jour</button>
           </form>
         </div>
       </div>
@@ -118,28 +135,28 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Créer Employé</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
         </div>
         <div class="modal-body">
           <form (ngSubmit)="addEmployee()">
             <div class="mb-3">
               <label class="form-label">Nom Employé</label>
-              <input type="text" class="form-control" [(ngModel)]="newEmployee.nomEmploye" name="nomEmploye" required>
+              <input [(ngModel)]="newEmployee.nomEmploye" class="form-control" name="nomEmploye" required type="text">
             </div>
             <div class="mb-3">
               <label class="form-label">Nom Employé Supérieur</label>
-              <select class="form-select" [(ngModel)]="newEmployee.codeEmployeSuperieur" name="codeEmployeSuperieur">
+              <select [(ngModel)]="newEmployee.codeEmployeSuperieur" class="form-select" name="codeEmployeSuperieur">
                 <option [ngValue]="undefined" disabled selected>Sélectionner un supérieur</option>
                 <option *ngFor="let emp of employees" [ngValue]="emp.codeEmploye">{{ emp.nomEmploye }}</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="newGroupes" class="form-label">Groupes</label>
-              <select class="form-select" id="newGroupes" [ngModel]="newEmployee.codesGroupes" (change)="onGroupSelectionChange($event, newEmployee)" name="codesGroupes">
+              <label class="form-label" for="newGroupes">Groupes</label>
+              <select (change)="onGroupSelectionChange($event, newEmployee)" [ngModel]="newEmployee.codesGroupes" class="form-select" id="newGroupes" name="codesGroupes">
                 <option *ngFor="let group of groups" [value]="group.codeGroupe">{{ group.nomGroupe }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Ajouter</button>
+            <button class="btn btn-primary" data-bs-dismiss="modal" type="submit">Ajouter</button>
           </form>
         </div>
       </div>

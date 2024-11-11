@@ -16,7 +16,7 @@ export interface ClientRequest {
 
 export interface CompteResponse {
   codeCompte: number;
-  typeCompte: string;
+  typeCompte: 'COURANT' | 'EPARGNE';
   solde: number;
   taux: number;
   decouvert: number;
