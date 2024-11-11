@@ -37,6 +37,10 @@ export class OperationService {
     return this.http.get<OperationResponse[]>(`${this.baseUrl}/${codeCompte}`);
   }
 
+  getOperationsByEmploye(codeEmploye: number): Observable<OperationResponse[]> {
+    return this.http.get<OperationResponse[]>(`${this.baseUrl}/employe/${codeEmploye}`);
+  }
+
   virement(request: OperationRequest): Observable<OperationResponse> {
     return this.http.post<OperationResponse>(`${this.baseUrl}/virement`, request);
   }

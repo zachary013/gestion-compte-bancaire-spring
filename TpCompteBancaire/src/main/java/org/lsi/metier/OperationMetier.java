@@ -5,10 +5,11 @@ import org.lsi.dto.OperationResponse;
 import java.util.List;
 
 public interface OperationMetier {
-    OperationResponse saveOperation(OperationRequest request);
-    List<OperationResponse> listOperation();
-    OperationResponse verser(OperationRequest request);
-    OperationResponse retirer(OperationRequest request);
-    OperationResponse virement(OperationRequest request);
-    List<OperationResponse> getOperationsByCompte(String codeCompte);
+    public OperationResponse saveOperation(OperationRequest request);
+    public List<OperationResponse> listOperation();
+    public OperationResponse verser(OperationRequest request);
+    public OperationResponse retirer(OperationRequest request);
+    public OperationResponse virement(OperationRequest request);
+    public List<OperationResponse> getOperationsByCompte(String codeCompte);
+    public List<OperationResponse> getOperationsByEmploye(Long codeEmploye);
 }

@@ -44,6 +44,11 @@ public class OperationRestService {
         return ResponseEntity.ok(operationMetier.getOperationsByCompte(codeCompte));
     }
 
+    @GetMapping("/employe/{codeEmploye}")
+    public ResponseEntity<List<OperationResponse>> getOperationsByEmploye(@PathVariable Long codeEmploye) {
+        return ResponseEntity.ok(operationMetier.getOperationsByEmploye(codeEmploye));
+    }
+
     @PostMapping("/verser")
     public ResponseEntity<OperationResponse> verser(@RequestBody OperationRequest request) {
         return ResponseEntity.ok(operationMetier.verser(request));

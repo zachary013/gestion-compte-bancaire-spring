@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService, EmployeRequest, EmployeResponse } from '../employees.service';
 import { GroupsService } from '../groups.service';
-import {OperationResponse} from '../operation.service';
+import { OperationResponse, OperationService } from '../operation.service';
 
 @Component({
   selector: 'app-employe',
@@ -25,6 +25,7 @@ export class EmployeComponent implements OnInit {
   };
   editingEmployeeId: number | null = null;
   groups: { codeGroupe: number; nomGroupe: string }[] = [];
+  operations: OperationResponse[] = [];
 
   // Pagination variables
   currentPage: number = 1;
@@ -33,7 +34,8 @@ export class EmployeComponent implements OnInit {
 
   constructor(
     private employeesService: EmployeesService,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
+    private operationsService: OperationService
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +90,19 @@ export class EmployeComponent implements OnInit {
       (error: any) => {
         console.error("Error fetching employees:", error);
         this.showAlertMessage('Erreur lors de la récupération des employés', false);
+      }
+    );
+  }
+
+  openOperationsModal(codeEmploye: number) {
+    this.operationsService.getOperationsByEmploye(codeEmploye).subscribe(
+      (res: OperationResponse[]) => {
+        this.operations = res;
+        this.employee = this.employees.find(emp => emp.codeEmploye === codeEmploye) || null;
+      },
+      (error: any) => {
+        console.error("Erreur lors de la récupération des opérations:", error);
+        this.showAlertMessage('Erreur lors de la récupération des opérations', false);
       }
     );
   }

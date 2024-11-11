@@ -29,7 +29,7 @@
             <button (click)="prepareEditEmployee(employee)" class="btn btn-info" data-bs-target="#edit-employee" data-bs-toggle="modal">
               Modifier
             </button>
-            <button class="btn btn-warning">
+            <button (click)="openOperationsModal(employee.codeEmploye)" class="btn btn-warning" data-bs-target="#operations" data-bs-toggle="modal">
               Voir Opérations
             </button>
             <button (click)="deleteEmployee(employee.codeEmploye)" class="btn btn-danger">
@@ -93,15 +93,15 @@
     </div>
   </div>
 
-  <!-- Modal for Employee Operations
+  <!-- Modal for Employee Operations -->
   <div class="modal fade" id="operations" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Opérations</h5>
+          <h5 class="modal-title">Opérations de {{ employee?.nomEmploye }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
           <div *ngIf="employee">
             <table class="table">
               <thead>
@@ -114,10 +114,10 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let operation of employee.operations; let i = index">
+              <tr *ngFor="let operation of operations; let i = index">
                 <th>{{ i + 1 }}</th>
-                <td>{{ operation.DTYPE }}</td>
-                <td>{{ operation.numeroOperation }}</td>
+                <td>{{ operation.type }}</td>
+                <td>{{ operation.codeOperation }}</td>
                 <td>{{ operation.dateOperation | date }}</td>
                 <td>{{ operation.montant }}</td>
               </tr>
@@ -127,7 +127,9 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
+
+
 
   <!-- Modal for Creating Employee -->
   <div class="modal fade" id="create-employee" tabindex="-1">

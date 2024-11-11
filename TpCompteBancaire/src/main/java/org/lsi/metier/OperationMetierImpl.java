@@ -185,6 +185,19 @@ public class OperationMetierImpl implements OperationMetier {
                 .toList();
     }
 
+    @Override
+    public List<OperationResponse> getOperationsByEmploye(Long codeEmploye) {
+        Employe employe = employeRepository.findById(codeEmploye)
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
+        List<Operation> operations = operationRepository.findByEmploye(employe);
+
+        return operations.stream()
+                .map(this::convertToOperationDTO)
+                .toList();
+    }
+
+
     private OperationResponse convertToOperationDTO(Operation operation) {
         OperationResponse response = new OperationResponse();
         response.setCodeOperation(operation.getNumeroOperation());

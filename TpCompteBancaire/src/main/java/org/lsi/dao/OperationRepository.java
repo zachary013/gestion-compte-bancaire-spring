@@ -1,6 +1,7 @@
 package org.lsi.dao;
 
 import org.lsi.entities.Compte;
+import org.lsi.entities.Employe;
 import org.lsi.entities.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,8 @@ import java.util.List;
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     List<Operation> findByCompte(Compte compte);
+
+    List<Operation> findByEmploye(Employe employe);
 
     Page<Operation> findByCompteCodeCompte(String codeCompte, Pageable pageable);
 
