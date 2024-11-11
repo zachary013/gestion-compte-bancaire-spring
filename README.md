@@ -83,8 +83,8 @@ We welcome contributions! To get started:
 - Open a pull request.
 
 ## Directed by 
-- BAHASSOU Mohamed Amine
-- AZARKAN Zakaria
+- ***BAHASSOU Mohamed Amine***
+- ***AZARKAN Zakaria***
 
 ## License
 
