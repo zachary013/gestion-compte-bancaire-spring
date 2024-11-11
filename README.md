@@ -14,6 +14,8 @@ The **Bank of Morocco** is a web-based banking application designed to manage cu
 - **Responsive Frontend**: Built with **Angular**, providing a modern, responsive user interface that works seamlessly across all devices.
 - **Secure Communication**: The application ensures secure communication using **SSL/TLS** encryption for all transactions and sensitive data.
 
+![collage1](https://github.com/user-attachments/assets/c9b52a67-e225-424a-9d6a-fb6d371bf4b3)
+
 ## Technologies Used
 
 - **Backend**: 
@@ -45,7 +47,7 @@ The **Bank of Morocco** is a web-based banking application designed to manage cu
    cd bank-of-morocco
   ```
 - Set up the database in **MySQL**:
-   - Create a new database `bank_of_morocco`.
+   - Create a new database `db_banque_lsi`.
    - Update the database connection properties in `application.properties`.
 
 - Build and run the Spring Boot application:
@@ -79,6 +81,10 @@ We welcome contributions! To get started:
 - Commit your changes (`git commit -am 'Add new feature'`).
 - Push to the branch (`git push origin feature-name`).
 - Open a pull request.
+
+## Directed by 
+- ***BAHASSOU Mohamed Amine***
+- ***AZARKAN Zakaria***
 
 ## License
 
