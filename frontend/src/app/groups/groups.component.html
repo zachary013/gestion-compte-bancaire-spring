@@ -24,11 +24,14 @@
           <td>{{ group.codeGroupe }}</td>
           <td>{{ group.nomGroupe }}</td>
           <td class="d-flex gap-2">
-            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#update-group" (click)="setUpdateGroup(group)">
-              Update
+            <button class="btn btn-info">
+              Membres
             </button>
-            <button class="btn btn-danger btn-sm" (click)="deleteGroup(group.codeGroupe)">
-              Delete
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#update-group" (click)="setUpdateGroup(group)">
+              Modifier
+            </button>
+            <button class="btn btn-danger" (click)="deleteGroup(group.codeGroupe)">
+              Supprimer
             </button>
           </td>
         </tr>

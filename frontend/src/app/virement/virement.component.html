@@ -1,71 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virement Between Clients</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body  class="bg-transparent">
-
-<div class="container pb-2 ">
-  <div class="card  ">
-    <div class="card-header  ">
-      <h5>Client Virement</h5>
-      <p class="mb-0 small">Transfer funds between two clients</p>
+<div class="container pb-2">
+  <div class="card">
+    <div class="card-header">
+      <h5>Virement Client</h5>
+      <p class="mb-0 small">Transférer des fonds entre deux clients</p>
     </div>
     <div class="card-body">
-      <form>
+      <form (ngSubmit)="submitVirement()">
 
-        <!-- Source Client Selection -->
+        <!-- Sélection de l'employé -->
         <div class="mb-3">
-          <label for="sourceClientSelect" class="form-label">Source Client</label>
-          <select class="form-select" id="sourceClientSelect" required>
-            <option selected disabled>Select the client to transfer from...</option>
-            <!-- Example options (populate dynamically in production) -->
-            <option value="1">Client A</option>
-            <option value="2">Client B</option>
-            <option value="3">Client C</option>
+          <label for="employeeSelect" class="form-label">Sélectionner un employé</label>
+          <select class="form-select" id="employeeSelect" [(ngModel)]="virementRequest.codeEmploye" name="employee" (change)="onEmployeeChange()" required>
+            <option selected disabled>Sélectionnez l'employé qui effectue le transfert...</option>
+            <option *ngFor="let employe of employees" [value]="employe.codeEmploye">
+              {{ employe.nomEmploye }}
+            </option>
           </select>
         </div>
 
-        <!-- Destination Client Selection -->
+        <!-- Sélection du client source -->
         <div class="mb-3">
-          <label for="destinationClientSelect" class="form-label">Destination Client</label>
-          <select class="form-select" id="destinationClientSelect" required>
-            <option selected disabled>Select the client to transfer to...</option>
-            <!-- Example options (populate dynamically in production) -->
-            <option value="1">Client D</option>
-            <option value="2">Client E</option>
-            <option value="3">Client F</option>
+          <label for="sourceClientSelect" class="form-label">Client Source</label>
+          <select class="form-select" id="sourceClientSelect" [(ngModel)]="selectedSourceClient" name="sourceClient" (change)="onClientChange('source')" required>
+            <option selected disabled>Sélectionnez le client source...</option>
+            <option *ngFor="let client of clients" [value]="client.codeClient">
+              {{ client.nomClient }}
+            </option>
           </select>
         </div>
 
-        <!-- Amount Input -->
+        <!-- Sélection du compte source -->
         <div class="mb-3">
-          <label for="amountInput" class="form-label">Virement Amount</label>
-          <input type="number" class="form-control" id="amountInput" placeholder="Enter amount" required>
+          <label for="sourceAccountSelect" class="form-label">Compte Source</label>
+          <select class="form-select" id="sourceAccountSelect" [(ngModel)]="virementRequest.codeCompte" name="sourceAccount" required>
+            <option selected disabled>Sélectionnez le compte source...</option>
+            <option *ngFor="let compte of sourceAccounts" [value]="compte.codeCompte">
+              Compte {{ compte.codeCompte }} - Solde: {{ compte.solde }} €
+            </option>
+          </select>
         </div>
 
-        <!-- Date Input -->
+        <!-- Sélection du client destinataire -->
+        <div class="mb-3">
+          <label for="destinationClientSelect" class="form-label">Client Destinataire</label>
+          <select class="form-select" id="destinationClientSelect" [(ngModel)]="selectedDestinationClient" name="destinationClient" (change)="onClientChange('destination')" required>
+            <option selected disabled>Sélectionnez le client destinataire...</option>
+            <option *ngFor="let client of clients" [value]="client.codeClient">
+              {{ client.nomClient }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sélection du compte destinataire -->
+        <div class="mb-3">
+          <label for="destinationAccountSelect" class="form-label">Compte Destinataire</label>
+          <select class="form-select" id="destinationAccountSelect" [(ngModel)]="virementRequest.codeCompteDest" name="destinationAccount" required>
+            <option selected disabled>Sélectionnez le compte destinataire...</option>
+            <option *ngFor="let compte of destinationAccounts" [value]="compte.codeCompte">
+              Compte {{ compte.codeCompte }} - Solde: {{ compte.solde }} €
+            </option>
+          </select>
+        </div>
+
+        <!-- Montant -->
+        <div class="mb-3">
+          <label for="amountInput" class="form-label">Montant du Virement</label>
+          <input type="number" class="form-control" id="amountInput" [(ngModel)]="virementRequest.montant" name="amount" placeholder="Entrez le montant" required>
+        </div>
+
+        <!-- Date -->
         <div class="mb-3">
           <label for="dateInput" class="form-label">Date</label>
-          <input type="date" class="form-control" id="dateInput" required>
+          <input type="date" class="form-control" id="dateInput" [(ngModel)]="dateOperation" name="date" required>
         </div>
 
-        <!-- Remarks -->
-        <div class="mb-3">
-          <label for="remarksInput" class="form-label">Remarks (Optional)</label>
-          <textarea class="form-control" id="remarksInput" rows="3" placeholder="Any additional details"></textarea>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Submit Virement</button>
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn btn-primary">Soumettre le Virement</button>
       </form>
     </div>
   </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

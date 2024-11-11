@@ -13,10 +13,10 @@ import java.util.List;
 @Data
 public class CompteRequest {
 
-    private String typeCompte ;
-    @NotNull(message = "code cli ne peut pas etre vide")
+    private String typeCompte;
+    @NotNull(message = "code client ne peut pas etre vide")
     private Long codeClient ;
-    @NotNull(message = "code cli ne peut pas etre vide")
+    @NotNull(message = "Le code employé ne peut pas être vide")
     private Long codeEmploye ;
 
     private Double decouvert ;

@@ -6,8 +6,6 @@ import org.lsi.dao.EmployeRepository;
 import org.lsi.dao.OperationRepository;
 import org.lsi.dto.CompteRequest;
 import org.lsi.dto.CompteResponse;
-import org.lsi.dto.EmployeResponse;
-import org.lsi.dto.GroupeRequest;
 import org.lsi.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,11 +67,6 @@ public class CompteMetierImpl implements CompteMetier {
 
         Compte savedCompte = compteRepository.save(cp);
         return convertToDTO(savedCompte);
-    }
-
-    @Override
-    public void deleteCompte(String codeCompte) {
-        compteRepository.deleteById(codeCompte);
     }
 
     @Override
@@ -139,110 +132,9 @@ public class CompteMetierImpl implements CompteMetier {
         return  convertToDTO(compteRepository.findAll());
     }
 
-
-
-
-
-    // operations
     @Override
-    public CompteResponse verser(String codeCompte, double montant, Long codeEmp) {
-        if (montant <= 0) {
-            throw new IllegalArgumentException("Le montant du versement doit être positif");
-        }
-
-        try {
-            Compte compte = compteRepository.findById(codeCompte)
-                    .orElseThrow(() -> new RuntimeException("Compte " + codeCompte + " non trouvé"));
-
-            Employe employe = employeRepository.findById(codeEmp)
-                    .orElseThrow(() -> new RuntimeException("Employé " + codeEmp + " non trouvé"));
-
-            // Création et sauvegarde de l'opération
-            Versement versement = new Versement(new Date(), montant);
-            versement.setCompte(compte);
-            versement.setEmploye(employe);
-            operationRepository.save(versement);
-
-            // Mise à jour du solde
-            compte.setSolde(compte.getSolde() + montant);
-            Compte savedCompte = compteRepository.save(compte);
-            return convertToDTO(savedCompte);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du versement : " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public CompteResponse retirer(String codeCompte, double montant, Long codeEmp) {
-        if (montant <= 0) {
-            throw new IllegalArgumentException("Le montant du retrait doit être positif");
-        }
-
-        try {
-            Compte compte = compteRepository.findById(codeCompte)
-                    .orElseThrow(() -> new RuntimeException("Compte " + codeCompte + " non trouvé"));
-
-            Employe employe = employeRepository.findById(codeEmp)
-                    .orElseThrow(() -> new RuntimeException("Employé " + codeEmp + " non trouvé"));
-
-            // Vérification du solde avec gestion spéciale pour CompteCourant
-            if (compte instanceof CompteCourant) {
-                CompteCourant cc = (CompteCourant) compte;
-                if (compte.getSolde() + cc.getDecouvert() < montant) {
-                    throw new RuntimeException("Solde insuffisant (y compris découvert autorisé)");
-                }
-            } else if (compte.getSolde() < montant) {
-                throw new RuntimeException("Solde insuffisant");
-            }
-
-            // Création et sauvegarde de l'opération
-            Retrait retrait = new Retrait(new Date(), montant);
-            retrait.setCompte(compte);
-            retrait.setEmploye(employe);
-            operationRepository.save(retrait);
-
-            // Mise à jour du solde
-            compte.setSolde(compte.getSolde() - montant);
-            Compte savedCompte = compteRepository.save(compte);
-            return convertToDTO(savedCompte);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du retrait : " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public CompteResponse virement(String cpte1, String cpte2, double montant, Long codeEmp) {
-        if (montant <= 0) {
-            throw new IllegalArgumentException("Le montant du virement doit être positif");
-        }
-
-        if (cpte1.equals(cpte2)) {
-            throw new IllegalArgumentException("Impossible d'effectuer un virement vers le même compte");
-        }
-
-        try {
-            // Retrait du compte source
-            CompteResponse source = retirer(cpte1, montant, codeEmp);
-
-            // Versement sur le compte destination
-            verser(cpte2, montant, codeEmp);
-
-            return source;
-
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors du virement : " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public Page<Operation> listOperationsByCompte(String codeCompte, Pageable pageable) {
-        Compte compte = compteRepository.findById(codeCompte)
-                .orElseThrow(() -> new RuntimeException("Compte non trouvé"));
-        return operationRepository.findByCompte(compte, pageable);
+    public void deleteCompte(String codeCompte) {
+        compteRepository.deleteById(codeCompte);
     }
 
 
