@@ -1,28 +1,28 @@
 <div class="container pb-2">
   <!-- Card for Comptes List -->
-  <div class="card">
+  <div class="card ">
     <div class="card-header">
       <h5 class="mb-0">
-        Comptes List
+        Liste des Comptes
         <!-- Button to trigger Add Compte Modal -->
         <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addCompteModal">
-          Add Compte
+          Ajouter un Compte
         </button>
       </h5>
     </div>
-    <div class="card-body">
+    <div class="card-body overflow-auto">
       <!-- Comptes Table -->
-      <table class="table table-hover">
+      <table class="table table-hover ">
         <thead>
         <tr>
-          <th scope="col">Type Compte</th>
+          <th scope="col">Type de Compte</th>
           <th scope="col">Code Compte</th>
-          <th scope="col">Date Creation</th>
+          <th scope="col">Date de Création</th>
           <th scope="col">Solde</th>
-          <th scope="col">Decouvert</th>
+          <th scope="col">Découvert</th>
           <th scope="col">Taux</th>
           <th scope="col">Code Client</th>
-          <th scope="col">Code Employee</th>
+          <th scope="col">Code Employé</th>
           <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -34,20 +34,20 @@
           <td>{{ compte.dateCreation | date }}</td>
           <td>{{ compte.solde }}</td>
           <td>{{ compte.typeCompte == 'CC' ? compte.decouvert : '-' }}</td>
-          <td>{{ compte.typeCompte == 'CE'? compte.taux : '-' }}%</td>
+          <td>{{ compte.typeCompte == 'CE'? compte.taux + '%' : '-' }}</td>
           <td>{{ compte.codeClient }}</td>
           <td>{{ compte.codeEmploye }}</td>
           <td class="">
             <div class="d-flex gap-2 ">
               <!-- View Details Button -->
               <button class="btn btn-info btn-sm" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Details
+                Détails
               </button>
               <button class="btn btn-warning btn-sm" (click)="getOneCompte(compte.codeCompte)" data-bs-toggle="modal" data-bs-target="#update-compte">
-                Update
+                Modifier
               </button>
               <button class="btn btn-danger btn-sm" (click)="deleteCompte(compte.codeCompte)" >
-                Delete
+                Supprimer
               </button>
             </div>
 
@@ -63,16 +63,16 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="addCompteModalLabel">Add New Compte</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 class="modal-title fs-5" id="addCompteModalLabel">Ajouter un compte</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
         <div class="modal-body">
           <form (ngSubmit)="addCompte()">
             <!-- Type Compte Dropdown -->
             <div class="mb-3">
-              <label for="typeCompte" class="form-label">Type Compte</label>
+              <label for="typeCompte" class="form-label">Type de Compte</label>
               <select class="form-select" id="typeCompte" [(ngModel)]="newCompte.typeCompte" name="typeCompte" required>
-                <option value="CE">Compte Epagne (CE)</option>
+                <option value="CE">Compte Épargne (CE)</option>
                 <option value="CC">Compte Courant (CC)</option>
                 <!-- Add more types as needed -->
               </select>
@@ -80,15 +80,15 @@
 
             <div class="mb-3">
               <label for="client" class="form-label">Clients</label>
-              <select class="form-select" id="client" [(ngModel)]="newCompte.codeClient"  name="typeCompte" required>
-                <option  *ngFor="let client of clients " [value]="client.codeClient">{{client.nomClient}}</option>
+              <select class="form-select" id="client" [(ngModel)]="newCompte.codeClient" name="typeCompte" required>
+                <option *ngFor="let client of clients" [value]="client.codeClient">{{client.nomClient}}</option>
               </select>
             </div>
 
             <div class="mb-3">
-              <label for="employe" class="form-label">Employee</label>
-              <select class="form-select" id="employe" [(ngModel)]="newCompte.codeEmploye"  name="typeCompte" required>
-                <option  *ngFor="let employee of employees " [value]="employee.codeEmploye">{{employee.nomEmploye}}</option>
+              <label for="employe" class="form-label">Employé</label>
+              <select class="form-select" id="employe" [(ngModel)]="newCompte.codeEmploye" name="typeCompte" required>
+                <option *ngFor="let employee of employees" [value]="employee.codeEmploye">{{employee.nomEmploye}}</option>
               </select>
             </div>
 
@@ -103,10 +103,10 @@
               <input type="number" class="form-control" id="taux" [(ngModel)]="newCompte.taux" name="taux" required />
             </div>
             <div class="mb-3" *ngIf="newCompte.typeCompte == 'CC' ">
-              <label for="decouvert" class="form-label">Decouvert</label>
+              <label for="decouvert" class="form-label">Découvert</label>
               <input type="number" class="form-control" id="decouvert" [(ngModel)]="newCompte.decouvert" name="taux" required />
             </div>
-            <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Add Compte</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Ajouter</button>
           </form>
         </div>
       </div>
@@ -118,37 +118,36 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Compte Details</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Détails du Compte</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
         <div class="modal-body">
           <!-- Single Compte Details -->
           <div *ngIf="compte" class="mt-4">
-            <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
-            <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
-            <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
-            <p><strong>Solde:</strong> {{ compte.solde }}</p>
-            <p *ngIf="compte.typeCompte == 'CC'" ><strong>Decouvert:</strong> {{ compte.decouvert }}</p>
-            <p *ngIf="compte.typeCompte == 'CE'"><strong>Taux:</strong> {{ compte.taux }}%</p>
-            <p><strong>Code Client:</strong> {{ compte.codeEmploye }}</p>
-            <p><strong>Code Employee:</strong> {{ compte.codeClient }}</p>
+            <p><strong>Code Compte :</strong> {{ compte.codeCompte }}</p>
+            <p><strong>Type de Compte :</strong> {{ compte.typeCompte }}</p>
+            <p><strong>Date de Création :</strong> {{ compte.dateCreation | date }}</p>
+            <p><strong>Solde :</strong> {{ compte.solde }}</p>
+            <p *ngIf="compte.typeCompte == 'CC'"><strong>Découvert :</strong> {{ compte.decouvert }}</p>
+            <p *ngIf="compte.typeCompte == 'CE'"><strong>Taux :</strong> {{ compte.taux }}%</p>
+            <p><strong>Code Client :</strong> {{ compte.codeEmploye }}</p>
+            <p><strong>Code Employé :</strong> {{ compte.codeClient }}</p>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Modal for Viewing Compte Update (already existing) -->
   <div class="modal fade" id="update-compte" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="update-compteLabel">Compte Details</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 class="modal-title fs-5" id="update-compteLabel">Détails du Compte</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
         <div class="modal-body">
 
@@ -157,9 +156,9 @@
             <!-- Single Compte Details -->
             <div *ngIf="compte" class="mt-4">
 
-              <p><strong>Code Compte:</strong> {{ compte.codeCompte }}</p>
-              <p><strong>Type Compte:</strong> {{ compte.typeCompte }}</p>
-              <p><strong>Date Creation:</strong> {{ compte.dateCreation | date }}</p>
+              <p><strong>Code Compte :</strong> {{ compte.codeCompte }}</p>
+              <p><strong>Type de Compte :</strong> {{ compte.typeCompte }}</p>
+              <p><strong>Date de Création :</strong> {{ compte.dateCreation | date }}</p>
 
               <!-- Solde -->
               <div class="mb-3">
@@ -167,7 +166,7 @@
                 <input type="number" class="form-control" id="SoldeUpdate" [(ngModel)]="compte.solde" name="codeEmploye" required />
               </div>
               <!-- Taux Input -->
-              <div class="mb-3" *ngIf="compte.typeCompte == 'CE' " >
+              <div class="mb-3" *ngIf="compte.typeCompte == 'CE' ">
                 <label for="tauxUpdate" class="form-label">Taux</label>
                 <input type="number" class="form-control" id="tauxUpdate" [(ngModel)]="compte.taux" name="taux" required />
               </div>
@@ -175,7 +174,7 @@
                 <label for="decouvertUpdate" class="form-label">Découvert</label>
                 <input type="number" class="form-control" id="decouvertUpdate" [(ngModel)]="compte.decouvert" name="taux" required />
               </div>
-              <button type="submit" class="btn btn-primary "  data-bs-dismiss="modal">Update Compte</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Mettre à jour le Compte</button>
 
             </div>
           </form>
