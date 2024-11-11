@@ -3,6 +3,7 @@ import { ComptesService } from '../comptes.service';
 import { Router } from '@angular/router';
 import {ClientService} from '../client.service';
 import {EmployeesService} from '../employees.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-comptes',
@@ -79,6 +80,11 @@ export class ComptesComponent implements OnInit {
       this.comptesService.add(this.newCompte).subscribe(
         (res) => {
           console.log('Compte added:', res);
+          Swal.fire({
+            title: "Succès",
+            text: "Ajout effectué avec succès!",
+            icon: "success"
+          });
           this.getAllComptes(); // Refresh the list after adding
           this.newCompte = {
             "codeCompte": "",
@@ -93,30 +99,65 @@ export class ComptesComponent implements OnInit {
         },
         (error) => {
           console.error('Error adding compte:', error);
+          Swal.fire({
+            title: "Erreur",
+            text: "Erreur lors d'ajout de compte!",
+            icon: "error"
+          });
         }
       );
     }
   }
 
   updateCompte() {
-    this.comptesService.update(this.compte.codeCompte, this.compte).subscribe((res) => {
-      this.getAllComptes();
-      this.newCompte = {
-        "codeCompte": "",
-        "dateCreation": "",
-        "solde": 0,
-        "operations": null,
-        "decouvert": null,
-        "codeClient": null,
-        "codeEmploye": null
-      };
+    this.comptesService.update(this.compte.codeCompte, this.compte).subscribe({
+      next: (res) => {
+        Swal.fire({
+          title: "Succès",
+          text: "Modification effectué avec succès!",
+          icon: "success"
+        });
+        this.getAllComptes();
+        this.newCompte = {
+          "codeCompte": "",
+          "dateCreation": "",
+          "solde": 0,
+          "operations": null,
+          "decouvert": null,
+          "codeClient": null,
+          "codeEmploye": null
+        };
 
-    });
+      },
+      error: err => {
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors de modification de compte!",
+          icon: "error"
+        });
+      }
+      }
+    );
   }
 
   deleteCompte(codeCompte: string){
-    this.comptesService.delete(codeCompte).subscribe((res: any) => {
-      this.getAllComptes();
+    this.comptesService.delete(codeCompte).subscribe({
+      next:(res: any) => {
+        Swal.fire({
+          title: "Succès",
+          text: "Suppression effectué avec succès!",
+          icon: "success"
+        });
+        this.getAllComptes();
+      },
+      error: err => {
+        Swal.fire({
+          title: "Erreur",
+          text: "Erreur lors de suppression de compte!",
+          icon: "error"
+        });
+
+      }
     });
   }
 

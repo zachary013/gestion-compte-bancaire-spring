@@ -1,0 +1,60 @@
+<div class="container pb-2">
+  <div class="card">
+    <div class="card-header">
+      <h5>Retrait Client</h5>
+      <p class="mb-0 small">Effectuer un retrait d'un compte client</p>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="submitRetrait()">
+
+        <!-- Sélection de l'employé -->
+        <div class="mb-3">
+          <label for="employeeSelect" class="form-label">Sélectionner un employé</label>
+          <select class="form-select" id="employeeSelect" [(ngModel)]="retraitRequest.codeEmploye" name="employee" (change)="onEmployeeChange()" required>
+            <option selected disabled>Sélectionnez l'employé qui effectue le retrait...</option>
+            <option *ngFor="let employe of employees" [value]="employe.codeEmploye">
+              {{ employe.nomEmploye }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sélection du client -->
+        <div class="mb-3">
+          <label for="clientSelect" class="form-label">Client</label>
+          <select class="form-select" id="clientSelect" [(ngModel)]="selectedClient" name="client" (change)="onClientChange()" required>
+            <option selected disabled>Sélectionnez le client...</option>
+            <option *ngFor="let client of clients" [value]="client.codeClient">
+              {{ client.nomClient }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sélection du compte source -->
+        <div class="mb-3">
+          <label for="sourceAccountSelect" class="form-label">Compte Source</label>
+          <select class="form-select" id="sourceAccountSelect" [(ngModel)]="retraitRequest.codeCompte" name="sourceAccount" required>
+            <option selected disabled>Sélectionnez le compte source...</option>
+            <option *ngFor="let compte of sourceAccounts" [value]="compte.codeCompte">
+              Compte {{ compte.codeCompte }} - Solde: {{ compte.solde }} €
+            </option>
+          </select>
+        </div>
+
+        <!-- Montant -->
+        <div class="mb-3">
+          <label for="amountInput" class="form-label">Montant du Retrait</label>
+          <input type="number" class="form-control" id="amountInput" [(ngModel)]="retraitRequest.montant" name="amount" placeholder="Entrez le montant" required>
+        </div>
+
+        <!-- Date -->
+        <div class="mb-3">
+          <label for="dateInput" class="form-label">Date</label>
+          <input type="date" class="form-control" id="dateInput" [(ngModel)]="dateOperation" name="date" required>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn btn-primary">Soumettre le Retrait</button>
+      </form>
+    </div>
+  </div>
+</div>

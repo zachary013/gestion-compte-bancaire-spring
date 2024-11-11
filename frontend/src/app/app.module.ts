@@ -17,6 +17,7 @@ import { GroupsComponent } from './groups/groups.component';
 import {Select2Module} from "ng-select2-component";
 import {FormsModule} from "@angular/forms";
 import { NotfoundComponent } from './notfound/notfound.component';
+import { RetraitComponent } from './retrait/retrait.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
     DashboardComponent,
     GroupsComponent,
     OperationComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    RetraitComponent
   ],
     imports: [
         BrowserModule,

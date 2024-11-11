@@ -1,59 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Versement for Client</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body  class="bg-transparent">
-
-<div class="container pb-2 ">
-  <div class="card  ">
-    <div class="card-header    ">
-      <h5>Client Versement</h5>
-      <p class="mb-0 small">Enter payment details for a selected client</p>
+<div class="container pb-2">
+  <div class="card">
+    <div class="card-header">
+      <h5>Versement Client</h5>
+      <p class="mb-0 small">Déposer des fonds sur un compte client</p>
     </div>
     <div class="card-body">
-      <form>
+      <form (ngSubmit)="submitVersement()">
 
-        <!-- Client Selection -->
+        <!-- Sélection de l'employé -->
         <div class="mb-3">
-          <label for="clientSelect" class="form-label">Select Client</label>
-          <select class="form-select" id="clientSelect" required>
-            <option selected disabled>Choose a client...</option>
-            <!-- Example options (populate dynamically in production) -->
-            <option value="1">Client A</option>
-            <option value="2">Client B</option>
-            <option value="3">Client C</option>
+          <label for="employeeSelect" class="form-label">Sélectionner un employé</label>
+          <select class="form-select" id="employeeSelect" [(ngModel)]="versementRequest.codeEmploye" name="employee" required>
+            <option selected disabled>Sélectionnez l'employé qui effectue le versement...</option>
+            <option *ngFor="let employe of employees" [value]="employe.codeEmploye">
+              {{ employe.nomEmploye }}
+            </option>
           </select>
         </div>
 
-        <!-- Amount Input -->
+        <!-- Sélection du client source -->
         <div class="mb-3">
-          <label for="amountInput" class="form-label">Versement Amount</label>
-          <input type="number" class="form-control" id="amountInput" placeholder="Enter amount" required>
+          <label for="sourceClientSelect" class="form-label">Client</label>
+          <select class="form-select" id="sourceClientSelect" [(ngModel)]="selectedClient" name="sourceClient" (change)="fetchAccounts()" required>
+            <option selected disabled>Sélectionnez le client source...</option>
+            <option *ngFor="let client of clients" [value]="client.codeClient">
+              {{ client.nomClient }}
+            </option>
+          </select>
         </div>
 
-        <!-- Date Input -->
+        <!-- Sélection du compte source -->
+        <div class="mb-3">
+          <label for="sourceAccountSelect" class="form-label">Compte </label>
+          <select class="form-select" id="sourceAccountSelect" [(ngModel)]="selectedAccount" name="sourceAccount" required>
+            <option selected disabled>Sélectionnez le compte source...</option>
+            <option *ngFor="let compte of comptes" [value]="compte.codeCompte">
+              Compte {{ compte.codeCompte }} - Solde: {{ compte.solde }} €
+            </option>
+          </select>
+        </div>
+
+        <!-- Montant -->
+        <div class="mb-3">
+          <label for="amountInput" class="form-label">Montant du Versement</label>
+          <input type="number" class="form-control" id="amountInput" [(ngModel)]="versementRequest.montant" name="amount" placeholder="Entrez le montant" required>
+        </div>
+
+        <!-- Date -->
         <div class="mb-3">
           <label for="dateInput" class="form-label">Date</label>
-          <input type="date" class="form-control" id="dateInput" required>
+          <input type="date" class="form-control" id="dateInput" [(ngModel)]="dateOperation" name="date" required>
         </div>
 
-        <!-- Remarks -->
-        <div class="mb-3">
-          <label for="remarksInput" class="form-label">Remarks (Optional)</label>
-          <textarea class="form-control" id="remarksInput" rows="3" placeholder="Any additional details"></textarea>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Submit Versement</button>
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn btn-primary">Soumettre le Versement</button>
       </form>
     </div>
   </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

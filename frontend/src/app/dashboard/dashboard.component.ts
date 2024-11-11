@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
+import {GroupsService} from '../groups.service';
+import {Router} from '@angular/router';
+import {DashboardService} from '../dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,14 +11,33 @@ import Chart from 'chart.js/auto';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dashboardService: DashboardService, private router:Router) { }
 
-  ngOnInit(): void {
-    this.createBarChart();
-    this.createDoughnutChart();
+
+  quantities : any = {
+    "Compte": null,
+    "Groupe": null,
+    "Operation": null,
+    "Client": null,
+    "Employe": null
   }
 
-  // Create a Bar Chart for the first "Stats" card
+
+  ngOnInit(): void {
+    this.getQuantities();
+  }
+
+  getQuantities(): void {
+    this.dashboardService.getQuantities().subscribe((res: any) => {
+      this.quantities = res;
+      this.createBarChart();
+      this.createDoughnutChart();  // Create the charts after data is loaded
+    });
+  }
+
+
+
+
   createBarChart(): void {
     const barChartCtx = document.getElementById('myBarChart') as HTMLCanvasElement;
 
@@ -25,7 +47,7 @@ export class DashboardComponent implements OnInit {
         labels: ['Employés', 'Groupes'],
         datasets: [{
           label: 'Quantité',
-          data: [12, 19],
+          data: [this.quantities.Employe, this.quantities.Groupe],
           borderWidth: 1,
           backgroundColor: 'rgba(54, 162, 235, 0.3)',
           borderColor: 'rgba(54, 162, 235, 1)',
@@ -34,12 +56,16 @@ export class DashboardComponent implements OnInit {
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1 // Now inside the ticks object
+            }
           }
         }
       }
     });
   }
+
 
   // Create a Doughnut Chart for the second "Stats" card
   createDoughnutChart(): void {
@@ -51,7 +77,7 @@ export class DashboardComponent implements OnInit {
         labels: ['Opérations', 'Comptes', 'Clients'],
         datasets: [{
           label: 'Votes Distribution',
-          data: [12, 19, 3],
+          data: [this.quantities.Operation, this.quantities.Compte, this.quantities.Client],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -74,7 +100,7 @@ export class DashboardComponent implements OnInit {
           tooltip: {
             callbacks: {
               label: (tooltipItem) => {
-                return tooltipItem.label + ': ' + tooltipItem.raw + ' votes';
+                return tooltipItem.label + ': ' + tooltipItem.raw ;
               }
             }
           }
