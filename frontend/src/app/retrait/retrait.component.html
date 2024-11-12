@@ -31,7 +31,7 @@
 
         <!-- Sélection du compte source -->
         <div class="mb-3">
-          <label for="sourceAccountSelect" class="form-label">Compte Source</label>
+          <label for="sourceAccountSelect" class="form-label">Compte </label>
           <select class="form-select" id="sourceAccountSelect" [(ngModel)]="retraitRequest.codeCompte" name="sourceAccount" required>
             <option selected disabled>Sélectionnez le compte source...</option>
             <option *ngFor="let compte of sourceAccounts" [value]="compte.codeCompte">

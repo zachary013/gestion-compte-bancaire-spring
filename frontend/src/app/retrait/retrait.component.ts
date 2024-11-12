@@ -71,8 +71,8 @@ export class RetraitComponent {
       this.operationService.retirer(this.retraitRequest).subscribe({
         next: (response) => {
           Swal.fire({
-            title: "Good job!",
-            text: "You clicked the button!",
+            title: "Succée!",
+            text: "Retrait effectué avec succès!",
             icon: "success"
           });
           //this.retraitResponse = response;

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {EmployeesService} from '../employees.service';
 import {Router} from '@angular/router';
 import {GroupsService} from '../groups.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-groups',
@@ -35,6 +36,11 @@ export class GroupsComponent implements OnInit{
   addGroup() {
     if(this.group.nomGroupe != ""){
       this.groupsService.add(this.group).subscribe((res) => {
+        Swal.fire({
+          title: "Succée!",
+          text: "Ajout de group effectué avec succès!",
+          icon: "success"
+        });
         this.getAllGroup();
       })
     }
@@ -43,7 +49,11 @@ export class GroupsComponent implements OnInit{
 
   updateGroup() {
     this.groupsService.update(this.newGroup.codeGroupe, this.newGroup).subscribe((res) => {
-
+      Swal.fire({
+        title: "Succée!",
+        text: "Modification effectué avec succès!",
+        icon: "success"
+      });
       this.getAllGroup();
 
     });
@@ -65,6 +75,11 @@ export class GroupsComponent implements OnInit{
   deleteGroup(codeGroup: number){
     this.groupsService.delete(codeGroup).subscribe((res: any) => {
       this.groups = res;
+      Swal.fire({
+        title: "Succée!",
+        text: "Suppression effectué avec succès!",
+        icon: "success"
+      });
       this.getAllGroup();
     });
   }
