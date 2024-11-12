@@ -9,7 +9,8 @@ import org.lsi.entities.Employe;
 public interface EmployeMetier {
     public EmployeResponse saveEmploye(EmployeRequest employeRequest);
     public EmployeResponse updateEmploye(Long codeEmploye, EmployeRequest employeRequest);
-    public List<EmployeResponse> listEmployes();
     public EmployeResponse getEmploye(Long codeEmploye);
+    public List<EmployeResponse> listEmployes();
+    public List<EmployeResponse> getEmployesParGroupe(Long codeGroupe);
     public void deleteEmploye(Long codeEmploye);
 }
